@@ -26,15 +26,15 @@ for (var i = 0; i < 15; i++) {
 }
 
 collisions.push({
-    point1: new DVec2({x: 0, y: 0}),
-    point2: new DVec2({x: 0, y: boardHeight}),
-    effectAngle: -90
+    point1: new Point({x: 0, y: 0}),
+    point2: new Point({x: 0, y: boardHeight}),
+    vector:new Point(0)
 });
 
 collisions.push({
-    point1: new DVec2({x: boardWidth, y: 0}),
-    point2: new DVec2({x: boardWidth, y: boardHeight}),
-    effectAngle: 90
+    point1: new Point({x: boardWidth, y: 0}),
+    point2: new Point({x: boardWidth, y: boardHeight}),
+    vector:new Point(180)
 });
 
 function loadImage(imgUrl) {
@@ -128,7 +128,7 @@ function drawCannonBall(context) {
 
     context.translate(cannonBall.width / 2, cannonBall.height / 2);
     context.drawImage(cannonBall, -cannonBall.width / 2, -cannonBall.height / 2);
-    context.strokeStyle='white';
+    context.strokeStyle = 'white';
     context.strokeText('Angle: ' + currentCannonBall.angle, 25, 25);
     context.restore();
 }
@@ -149,9 +149,6 @@ function tick() {
 
         currentCannonBall.x += Math.cos(currentCannonBall.angle * Math.PI / 180) * currentCannonBall.velocity;
         currentCannonBall.y += Math.sin(currentCannonBall.angle * Math.PI / 180) * currentCannonBall.velocity;
-        /*if (currentCannonBall.x < 0 || currentCannonBall.y < 0 || currentCannonBall.x > boardWidth || currentCannonBall.y > boardHeight) {
-         currentCannonBall = undefined;
-         }*/
 
         var cannonBallBox = {x: currentCannonBall.x - cannonBall.width / 2, y: currentCannonBall.y - cannonBall.height / 2, width: cannonBall.width, height: cannonBall.height};
 
@@ -165,15 +162,15 @@ function tick() {
             }
         }
 
-        if(currentCannonBall.disableCollisions){
+        if (currentCannonBall.disableCollisions) {
             currentCannonBall.disableCollisions--;
             return;
         }
         for (var i = 0; i < collisions.length; i++) {
             var collision = collisions[i];
-            if (circleLineCollision(new DVec2(currentCannonBall), cannonBall.width / 2, collision.point1, collision.point2)) {
-                currentCannonBall.angle+=collision.effectAngle;
-                currentCannonBall.disableCollisions=5;
+            if (circleLineCollision(new Point(currentCannonBall), cannonBall.width / 2, collision.point1, collision.point2)) {
+                currentCannonBall.angle = reflect(collision.vector,new Point(currentCannonBall.angle)).angle();
+                currentCannonBall.disableCollisions = 50;
             }
         }
     }
@@ -201,9 +198,9 @@ function circleLineCollision(C, r, linePoint1, linePoint2) {
     var A = linePoint1;
     var B = linePoint2;
     var P;
-    var AC = new DVec2(C);
+    var AC = new Point(C);
     AC.sub(A);
-    var AB = new DVec2(B);
+    var AB = new Point(B);
     AB.sub(A);
     var ab2 = AB.dot(AB);
     var acab = AC.dot(AB);
@@ -215,11 +212,11 @@ function circleLineCollision(C, r, linePoint1, linePoint2) {
         t = 1.0;
 
     //P = A + t * AB;
-    P = new DVec2(AB);
+    P = new Point(AB);
     P.mul(t);
     P.add(A);
 
-    var H = new DVec2(P);
+    var H = new Point(P);
     H.sub(C);
     var h2 = H.dot(H);
     var r2 = r * r;
