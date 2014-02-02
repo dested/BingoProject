@@ -1,3 +1,4 @@
+
 var canvas;
 var context;
 
@@ -15,8 +16,9 @@ var rotate = 0;
 var ballPieces = [];
 var collisions = [];
 var currentCannonBall;
+var angleWatchers = [];
 
-for (var i = 0; i < 15; i++) {
+for (var i = 0; i < 45; i++) {
     ballPieces.push({
             x: parseInt(Math.random() * (boardWidth - 100)) + 50,
             y: parseInt(Math.random() * (boardHeight - 100)) + 50,
@@ -26,15 +28,27 @@ for (var i = 0; i < 15; i++) {
 }
 
 collisions.push({
-    point1: new Point({x: 0, y: 0}),
-    point2: new Point({x: 0, y: boardHeight}),
-    vector:new Point(0)
+    point1: new Vector({x: 0, y: 0}),
+    point2: new Vector({x: 0, y: boardHeight}),
+    vector: new Vector(180)
 });
 
 collisions.push({
-    point1: new Point({x: boardWidth, y: 0}),
-    point2: new Point({x: boardWidth, y: boardHeight}),
-    vector:new Point(180)
+    point1: new Vector({x: boardWidth, y: 0}),
+    point2: new Vector({x: boardWidth, y: boardHeight}),
+    vector: new Vector(0)
+});
+
+collisions.push({
+    point1: new Vector({x: 0, y: boardHeight }),
+    point2: new Vector({x: boardWidth, y: boardHeight}),
+    vector: new Vector(270)
+});
+
+collisions.push({
+    point1: new Vector({x: 0, y: 0}),
+    point2: new Vector({x: boardWidth, y: 0}),
+    vector: new Vector(90)
 });
 
 function loadImage(imgUrl) {
@@ -42,30 +56,38 @@ function loadImage(imgUrl) {
     image.src = imgUrl;
     return image;
 }
+var clicking = false;
+var clickingEv = undefined;
+
 function start() {
     canvas = document.createElement('canvas');
     canvas.width = boardWidth;
     canvas.height = boardHeight;
     context = canvas.getContext("2d");
     document.body.appendChild(canvas);
+    canvas.onmousedown = function (ev) {
 
+        if (ev.y < boardHeight / 2) {
+            clicking = true;
+            clickingEv = ev;
+        }
+    };
+    canvas.onmouseup = function (ev) {
+        clicking = false;
+    };
     canvas.onclick = function (ev) {
         if (ev.y > boardHeight / 2) {
             currentCannonBall = {
-                x: 160,
+                x: 160+cannon.width/2,
                 y: 0,
                 angle: rotate + 90,
-                velocity: 10
+                velocity: 15
             };//todo: to object
+
 
             return;
         }
-        if (ev.x < boardWidth / 2) {
-            rotate += 5;
-        }
-        if (ev.x > boardWidth / 2) {
-            rotate -= 5;
-        }
+
     };
 
     backgroundImage = loadImage('/images/gameBoards/board1.png');
@@ -109,9 +131,9 @@ function drawBalls(context) {
             ballImage = ball;
         }
 
-        context.translate(ballImage.width / 2, ballImage.height / 2);
+        context.translate(-ballImage.width / 2, -ballImage.height / 2);
 
-        context.drawImage(ballImage, -ballImage.width / 2, -ballImage.height / 2);
+        context.drawImage(ballImage, 0, 0);
 
         context.restore();
     }
@@ -126,10 +148,40 @@ function drawCannonBall(context) {
     context.translate(currentCannonBall.x, currentCannonBall.y);
 
 
-    context.translate(cannonBall.width / 2, cannonBall.height / 2);
-    context.drawImage(cannonBall, -cannonBall.width / 2, -cannonBall.height / 2);
-    context.strokeStyle = 'white';
-    context.strokeText('Angle: ' + currentCannonBall.angle, 25, 25);
+    context.translate(-cannonBall.width / 2, -cannonBall.height / 2);
+    context.drawImage(cannonBall, 0, 0);
+    /*    context.strokeStyle = 'white';
+     context.strokeText('Angle: ' + currentCannonBall.angle, 25, 25);*/
+
+
+    context.restore();
+}
+function drawAngleWatcher(angleWatcher, lastAngleWatcher, context) {
+    context.save();
+
+
+    context.translate(angleWatcher.x, angleWatcher.y);
+
+
+    context.beginPath();
+    context.moveTo(0, 0);
+    context.translate(-angleWatcher.x, -angleWatcher.y);
+    context.translate(lastAngleWatcher.x, lastAngleWatcher.y);
+    context.lineTo(0, 0);
+
+
+    context.lineWidth = 5;
+    if (lastAngleWatcher.collide) {
+        context.strokeStyle = 'red';
+
+    } else {
+        context.strokeStyle = 'blue';
+
+    }
+
+    context.stroke();
+
+
     context.restore();
 }
 
@@ -137,14 +189,85 @@ function drawCannonBall(context) {
 function render() {
     context.clearRect(0, 0, boardWidth, boardHeight);
     drawBackground(context);
-    drawCannon(context);
     drawBalls(context);
+
     if (currentCannonBall) {
+
         drawCannonBall(context);
+
+
     }
+    drawCannon(context);
+/*
+    for (var i = 1; i < angleWatchers.length; i++) {
+
+        drawAngleWatcher(angleWatchers[i - 1], angleWatchers[i], context);
+    }
+*/
 }
 
 function tick() {
+
+
+    if (clicking) {
+
+
+        if (clickingEv.x < boardWidth / 2) {
+            rotate += 1;
+        }
+        if (clickingEv.x > boardWidth / 2) {
+            rotate -= 1;
+        }
+
+/*
+        angleWatchers = [];
+
+        var piece = {
+            x: 160,
+            y: 0,
+            angle: rotate + 90,
+            velocity: 5,
+            lastCollision: undefined,
+            collide: false
+
+        };
+        for (var ci = 0; ci < 2000; ci++) {
+            var lastPiece = piece;
+            var piece = {
+                x: lastPiece.x,
+                y: lastPiece.y,
+                angle: lastPiece.angle,
+                velocity: lastPiece.velocity,
+                lastCollision: lastPiece.lastCollision,
+                collide: lastPiece.collide
+            };
+            piece.collide = false;
+
+            for (var i = 0; i < collisions.length; i++) {
+                var collision = collisions[i];
+
+                if (piece.lastCollision === collision) {
+                    continue
+                }
+                if (circleLineCollision(new Vector(lastPiece), cannonBall.width / 2, collision.point1, collision.point2)) {
+                    piece.angle = reflect(new Vector(lastPiece.angle), collision.vector);
+                    piece.lastCollision = collision;
+                    piece.collide = true;
+
+                }
+            }
+            piece.x += Math.cos(piece.angle * Math.PI / 180) * piece.velocity;
+            piece.y += Math.sin(piece.angle * Math.PI / 180) * piece.velocity;
+
+
+            angleWatchers.push(piece);
+
+
+        }*/
+
+    }
+
+
     if (currentCannonBall) {
 
         currentCannonBall.x += Math.cos(currentCannonBall.angle * Math.PI / 180) * currentCannonBall.velocity;
@@ -162,18 +285,70 @@ function tick() {
             }
         }
 
-        if (currentCannonBall.disableCollisions) {
-            currentCannonBall.disableCollisions--;
-            return;
-        }
+
         for (var i = 0; i < collisions.length; i++) {
             var collision = collisions[i];
-            if (circleLineCollision(new Point(currentCannonBall), cannonBall.width / 2, collision.point1, collision.point2)) {
-                currentCannonBall.angle = reflect(collision.vector,new Point(currentCannonBall.angle)).angle();
-                currentCannonBall.disableCollisions = 50;
+            if (currentCannonBall.lastCollision === collision) {
+                continue;
+            }
+            if (circleLineCollision(new Vector(currentCannonBall), cannonBall.width / 2, collision.point1, collision.point2)) {
+                currentCannonBall.angle = reflect(new Vector(currentCannonBall.angle), collision.vector);
+                currentCannonBall.lastCollision = collision;
             }
         }
     }
+}
+
+function reflect(vector1, vector2) {
+    /* var n=new Vector(vector2);
+
+     //    Vnew = -2*(V dot N)*N + V
+
+     //    return vector +dot * normal;
+
+     var dot = -2*vector1.dot(n);
+
+
+     n.mul(dot);
+     n.add(vector1);
+     return n.angle();*/
+
+    /*
+     var dot = vector2.dot(vector1);
+
+     var x = vector1.x-((2 * dot) * vector2.x) ;
+     var y = vector1.y-((2 * dot) * vector2.y) ;
+
+     var reflection = new Vector({x: x, y: y})
+     return reflection.angle();
+     */
+
+
+//    u = (v · n / n · n) n
+//    w = v − u
+//    v′ = w − u
+
+    /*
+     var v = vector1;
+     var n = vector2;
+
+     var vdotn = v.dot(n);
+     var ndotn = n.dot(n);
+
+     var divdots = vdotn / ndotn;
+     var u = {x: divdots * n.x, y: divdots * n.y};
+
+     var w = {x: v.x- u.x, y: v.y- u.y};
+
+     var newAngle=new Vector({x: w.x- u.x, y: w.y- u.y}).angle();
+
+     return  newAngle;*/
+
+    var incoming = vector1.angle();
+    var normal = vector2.angle();
+    var outgoing = 2 * normal - 180 - incoming;
+    return outgoing;
+
 }
 
 
@@ -194,13 +369,13 @@ setInterval(function () {
 start();
 
 
-function circleLineCollision(C, r, linePoint1, linePoint2) {
-    var A = linePoint1;
-    var B = linePoint2;
+function circleLineCollision(C, r, lineVector1, lineVector2) {
+    var A = lineVector1;
+    var B = lineVector2;
     var P;
-    var AC = new Point(C);
+    var AC = new Vector(C);
     AC.sub(A);
-    var AB = new Point(B);
+    var AB = new Vector(B);
     AB.sub(A);
     var ab2 = AB.dot(AB);
     var acab = AC.dot(AB);
@@ -212,11 +387,11 @@ function circleLineCollision(C, r, linePoint1, linePoint2) {
         t = 1.0;
 
     //P = A + t * AB;
-    P = new Point(AB);
+    P = new Vector(AB);
     P.mul(t);
     P.add(A);
 
-    var H = new Point(P);
+    var H = new Vector(P);
     H.sub(C);
     var h2 = H.dot(H);
     var r2 = r * r;

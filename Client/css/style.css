@@ -24,4 +24,12 @@ canvas {
     top: 0;
     left: 0;
     z-index: 0;
-} /* To remove the scrollbars */
+}
+.clickManager {
+    display: block;
+    margin: 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 0;
+}/* To remove the scrollbars */
