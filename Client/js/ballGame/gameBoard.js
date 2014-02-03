@@ -8,11 +8,8 @@ define([
     './planes/orbs',
     './planes/cannon',
 //objects
-    './pieces/orb',
-    './pieces/cannon'
-
-
-], function (assetLoader, canvasUtils,ClickManager, BackgroundPlane, OrbsPlane, CannonPlane, Orb, Cannon) {
+    './pieces/orb'
+], function (assetLoader, canvasUtils,ClickManager, BackgroundPlane, OrbsPlane, CannonPlane, Orb) {
 
     function GameModel(boardWidth, boardHeight) {
         this.boardWidth = boardWidth;
@@ -31,15 +28,13 @@ define([
         }
 
         this.cannonLocation = {x: this.boardWidth / 2, y: 0};
-        this.cannonAngle = 90;
+        this.cannonAngle = 0;
 
         this.cannonLeftButton = {x: this.boardWidth / 2 - this.boardWidth / 4, y: 100};
         this.cannonRightButton = {x: this.boardWidth / 2 + this.boardWidth / 4, y: 100};
 
-        this.cannon = new Cannon(this);
 
-        this.gameModel.clickManager=undefined;
-
+        this.clickManager=undefined;
     }
 
     function GameBoard(boardWidth, boardHeight) {
@@ -50,6 +45,8 @@ define([
         this.backgroundPlane = new BackgroundPlane(this.gameModel);
         this.orbsPlane = new OrbsPlane(this.gameModel);
         this.cannonPlane = new CannonPlane(this.gameModel);
+
+        this.gameModel.clickManager=new ClickManager(this.gameModel);
     }
 
     GameBoard.prototype.init = function () {
@@ -64,8 +61,9 @@ define([
         this.cannonPlane.init();
         ballGameBoard.appendChild(this.cannonPlane.plane.canvas);
 
-        this.gameModel.clickManager=new ClickManager(this.gameModel);
+        this.gameModel.clickManager.init();
         ballGameBoard.appendChild(this.gameModel.clickManager.element);
+
 
 
 

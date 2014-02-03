@@ -22,12 +22,16 @@ define([
     }
 
     assetLoader.pushAsset('board', '/images/gameBoards/board1.png');
-    assetLoader.pushAsset('cannon', '/images/cannons/cannon1.png');
     assetLoader.pushAsset('orb', '/images/balls/ball1.png');
     assetLoader.pushAsset('orbHit', '/images/balls/ball1Hit.png');
-    assetLoader.pushAsset('cannonBall', '/images/cannonBalls/cannonBall1.png');
-    assetLoader.loadAssets(startGame);
 
+    assetLoader.pushAsset('cannon', '/images/cannons/cannon1.png');
+    assetLoader.pushAsset('cannonBall', '/images/cannonBalls/cannonBall1.png');
+
+    assetLoader.pushAsset('cannonRotateLeft', '/images/cannons/cannonRotateLeft.png');
+    assetLoader.pushAsset('cannonRotateRight', '/images/cannons/cannonRotateRight.png');
+
+    assetLoader.loadAssets(startGame);
 
 });
 
