@@ -8,6 +8,9 @@ define(['canvasUtils'], function (canvasUtils) {
             this.plane = canvasUtils.createCanvas(this.gameModel.boardWidth, this.gameModel.boardHeight);
 
         };
+        OrbsPlane.prototype.tick = function () {
+
+        };
 
         OrbsPlane.prototype.render = function () {
             this.plane.clear();

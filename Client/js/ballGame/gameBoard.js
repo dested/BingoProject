@@ -7,35 +7,10 @@ define([
     './planes/background',
     './planes/orbs',
     './planes/cannon',
-//objects
-    './pieces/orb'
-], function (assetLoader, canvasUtils,ClickManager, BackgroundPlane, OrbsPlane, CannonPlane, Orb) {
 
-    function GameModel(boardWidth, boardHeight) {
-        this.boardWidth = boardWidth;
-        this.boardHeight = boardHeight;
-        this.elementId='ballGameBoard';
+    './gameModel'
+], function (assetLoader, canvasUtils, ClickManager, BackgroundPlane, OrbsPlane, CannonPlane, GameModel) {
 
-        this.background = assetLoader.getAsset('board');
-        this.orbs = [];
-        for (var i = 0; i < 45; i++) {
-            this.orbs.push(
-                new Orb(
-                    parseInt(Math.random() * (this.boardWidth - 100)) + 50,
-                    parseInt(Math.random() * (this.boardHeight - 100)) + 50
-                )
-            );
-        }
-
-        this.cannonLocation = {x: this.boardWidth / 2, y: 0};
-        this.cannonAngle = 0;
-
-        this.cannonLeftButton = {x: this.boardWidth / 2 - this.boardWidth / 4, y: 100};
-        this.cannonRightButton = {x: this.boardWidth / 2 + this.boardWidth / 4, y: 100};
-
-
-        this.clickManager=undefined;
-    }
 
     function GameBoard(boardWidth, boardHeight) {
 
@@ -46,7 +21,7 @@ define([
         this.orbsPlane = new OrbsPlane(this.gameModel);
         this.cannonPlane = new CannonPlane(this.gameModel);
 
-        this.gameModel.clickManager=new ClickManager(this.gameModel);
+        this.gameModel.clickManager = new ClickManager(this.gameModel);
     }
 
     GameBoard.prototype.init = function () {
@@ -63,16 +38,18 @@ define([
 
         this.gameModel.clickManager.init();
         ballGameBoard.appendChild(this.gameModel.clickManager.element);
-
-
-
-
     };
 
     GameBoard.prototype.render = function () {
         this.backgroundPlane.render();
         this.orbsPlane.render();
         this.cannonPlane.render();
+    };
+
+    GameBoard.prototype.tick = function () {
+        this.backgroundPlane.tick();
+        this.orbsPlane.tick();
+        this.cannonPlane.tick();
     };
 
     return GameBoard;

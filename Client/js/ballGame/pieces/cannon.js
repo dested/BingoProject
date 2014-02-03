@@ -4,15 +4,15 @@ define(
         'clickRect'
     ],
     function (assetLoader, ClickRect) {
-        function Cannon(gameModel,canonPlane) {
+        function Cannon(gameModel, canonPlane) {
             this.gameModel = gameModel;
             this.cannonAsset = undefined;
             this.cannonRotateLeftAsset = undefined;
             this.cannonRotateRightAsset = undefined;
 
-            this._moveInterval = undefined;
+            this.moveCannon = undefined;
 
-            this.canonPlane=canonPlane;
+            this.canonPlane = canonPlane;
         }
 
 
@@ -90,29 +90,25 @@ define(
 
         };
 
-        Cannon.prototype.rotateLeft = function (eventType, clickBox, x, y) {
-            if (this._moveInterval) {
-                window.clearInterval(this._moveInterval);
+        Cannon.prototype.tick = function () {
+            if (this.moveCannon) {
+                this.gameModel.cannonAngle += this.moveCannon;
             }
-
+        };
+        Cannon.prototype.rotateLeft = function (eventType, clickBox, x, y) {
+            this.moveCannon = undefined;
             switch (eventType) {
                 case 'mouseDown':
-                    this._moveInterval = window.setInterval((function () {
-                        this.gameModel.cannonAngle += 3;
-                    }).bind(this), 50);
+                    this.moveCannon = +1;
                     break;
             }
         };
 
         Cannon.prototype.rotateRight = function (eventType, clickBox, x, y) {
-            if (this._moveInterval) {
-                window.clearInterval(this._moveInterval);
-            }
+            this.moveCannon = undefined;
             switch (eventType) {
                 case 'mouseDown':
-                    this._moveInterval = window.setInterval((function () {
-                        this.gameModel.cannonAngle -= 3;
-                    }).bind(this), 50);
+                    this.moveCannon = -1;
                     break;
             }
         };

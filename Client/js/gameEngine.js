@@ -19,6 +19,10 @@ define([
             gameBoard.render();
         }, 1000 / 60);
 
+        setInterval(function () {
+            gameBoard.tick();
+        }, 1000 / 60);
+
     }
 
     assetLoader.pushAsset('board', '/images/gameBoards/board1.png');

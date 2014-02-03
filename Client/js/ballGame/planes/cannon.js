@@ -33,6 +33,15 @@ define(
             context.restore();
         };
 
+        CannonPlane.prototype.tick = function () {
+
+            if (this.gameModel.cannonBall) {
+                this.gameModel.cannonBall.tick(context);
+            }
+
+            this.cannon.tick();
+        };
+
 
         CannonPlane.prototype.shootBall = function () {
             this.gameModel.cannonBall = new CannonBall(this.gameModel, this.gameModel.cannonLocation.x, this.gameModel.cannonLocation.y, this.gameModel.cannonAngle+90);

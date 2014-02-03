@@ -27,29 +27,29 @@ define(['assetLoader'], function (assetLoader) {
         this.x += Math.cos(this.angle * Math.PI / 180) * this.velocity;
         this.y += Math.sin(this.angle * Math.PI / 180) * this.velocity;
 
-        /*        var cannonBallBox = {x: this.x - image.width / 2, y: this.y - image.height / 2, width: image.width, height: image.height};
+        var cannonBallBox = {x: this.x - image.width / 2, y: this.y - image.height / 2, width: image.width, height: image.height};
+/*
+        for (var i = 0; i < ballPieces.length; i++) {
+            var ballPiece = ballPieces[i];
+            if (!ballPiece.hit) {
+                var pieceBox = {x: ballPiece.x - ball.width / 2, y: ballPiece.y - ball.height / 2, width: ball.width, height: ball.height};
+                if (boxCollides(pieceBox, cannonBallBox)) {
+                    ballPiece.hit = true;
+                }
+            }
+        }
 
-         for (var i = 0; i < ballPieces.length; i++) {
-         var ballPiece = ballPieces[i];
-         if (!ballPiece.hit) {
-         var pieceBox = {x: ballPiece.x - ball.width / 2, y: ballPiece.y - ball.height / 2, width: ball.width, height: ball.height};
-         if (boxCollides(pieceBox, cannonBallBox)) {
-         ballPiece.hit = true;
-         }
-         }
-         }
 
-
-         for (var i = 0; i < collisions.length; i++) {
-         var collision = collisions[i];
-         if (currentCannonBall.lastCollision === collision) {
-         continue;
-         }
-         if (circleLineCollision(new Vector(currentCannonBall), cannonBall.width / 2, collision.point1, collision.point2)) {
-         currentCannonBall.angle = reflect(new Vector(currentCannonBall.angle), collision.vector);
-         currentCannonBall.lastCollision = collision;
-         }
-         }*/
+        for (var i = 0; i < collisions.length; i++) {
+            var collision = collisions[i];
+            if (currentCannonBall.lastCollision === collision) {
+                continue;
+            }
+            if (circleLineCollision(new Vector(currentCannonBall), cannonBall.width / 2, collision.point1, collision.point2)) {
+                currentCannonBall.angle = reflect(new Vector(currentCannonBall.angle), collision.vector);
+                currentCannonBall.lastCollision = collision;
+            }
+        }*/
 
     };
 

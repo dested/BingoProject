@@ -10,6 +10,9 @@ define(['canvasUtils'], function (canvasUtils) {
             this.plane = canvasUtils.createCanvas(this.gameModel.boardWidth, this.gameModel.boardHeight);
         };
 
+        BackgroundPlane.prototype.tick = function () {
+        };
+
         BackgroundPlane.prototype.render = function () {
             if (this._drawnBackground !== this.gameModel.background) {
                 this._drawnBackground = this.gameModel.background;
