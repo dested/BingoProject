@@ -91,10 +91,10 @@ function start() {
     };
 
     backgroundImage = loadImage('/images/gameBoards/board1.png');
-    cannon = loadImage('/images/cannons/cannon1.png');
-    ball = loadImage('/images/balls/ball1.png');
-    ballHit = loadImage('/images/balls/ball1Hit.png');
-    cannonBall = loadImage('/images/cannonBalls/cannonBall1.png');
+    cannon = loadImage('/images/cannons/shooter.png');
+    ball = loadImage('/images/pegs/blue_peg.png');
+    ballHit = loadImage('/images/pegs/blue_peg_lit_overlay.png');
+    cannonBall = loadImage('/images/cannonBalls/ball_noshine.png');
 
 }
 
@@ -269,6 +269,7 @@ function tick() {
 
 
     if (currentCannonBall) {
+
 
         currentCannonBall.x += Math.cos(currentCannonBall.angle * Math.PI / 180) * currentCannonBall.velocity;
         currentCannonBall.y += Math.sin(currentCannonBall.angle * Math.PI / 180) * currentCannonBall.velocity;

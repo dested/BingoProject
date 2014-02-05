@@ -8,8 +8,8 @@ define([
     function startGame() {
 
 
-        var boardWidth = 438;
-        var boardHeight = 548;//todo: to object
+        var boardWidth = 430;
+        var boardHeight = 557;//todo: to object
 
         var gameBoard = new GameBoard(boardWidth, boardHeight);
         gameBoard.init();
@@ -26,11 +26,11 @@ define([
     }
 
     assetLoader.pushAsset('board', '/images/gameBoards/board1.png');
-    assetLoader.pushAsset('orb', '/images/balls/ball1.png');
-    assetLoader.pushAsset('orbHit', '/images/balls/ball1Hit.png');
+    assetLoader.pushAsset('peg', '/images/pegs/blue_peg.png');
+    assetLoader.pushAsset('pegHit', '/images/pegs/blue_peg_lit_overlay.png');
 
-    assetLoader.pushAsset('cannon', '/images/cannons/cannon1.png');
-    assetLoader.pushAsset('cannonBall', '/images/cannonBalls/cannonBall1.png');
+    assetLoader.pushAsset('cannon', '/images/cannons/shooter.png');
+    assetLoader.pushAsset('cannonBall', '/images/cannonBalls/ball_noshine.png');
 
     assetLoader.pushAsset('cannonRotateLeft', '/images/cannons/cannonRotateLeft.png');
     assetLoader.pushAsset('cannonRotateRight', '/images/cannons/cannonRotateRight.png');

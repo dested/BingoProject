@@ -1,19 +1,19 @@
 define(
     [
         'assetLoader',
-        './pieces/orb'
+        './pieces/peg'
     ],
-    function (assetLoader, Orb) {
+    function (assetLoader, Peg) {
         function GameModel(boardWidth, boardHeight) {
             this.boardWidth = boardWidth;
             this.boardHeight = boardHeight;
             this.elementId = 'ballGameBoard';
 
             this.background = assetLoader.getAsset('board');
-            this.orbs = [];
+            this.pegs = [];
             for (var i = 0; i < 45; i++) {
-                this.orbs.push(
-                    new Orb(
+                this.pegs.push(
+                    new Peg(
                         parseInt(Math.random() * (this.boardWidth - 100)) + 50,
                         parseInt(Math.random() * (this.boardHeight - 100)) + 50
                     )

@@ -1,27 +1,27 @@
 define(['canvasUtils'], function (canvasUtils) {
-        function OrbsPlane(gameModel) {
+        function PegsPlane(gameModel) {
             this.plane = undefined; //canvas plane
             this.gameModel = gameModel;
         }
 
-        OrbsPlane.prototype.init = function () {
+        PegsPlane.prototype.init = function () {
             this.plane = canvasUtils.createCanvas(this.gameModel.boardWidth, this.gameModel.boardHeight);
 
         };
-        OrbsPlane.prototype.tick = function () {
+        PegsPlane.prototype.tick = function () {
 
         };
 
-        OrbsPlane.prototype.render = function () {
+        PegsPlane.prototype.render = function () {
             this.plane.clear();
             var context = this.plane.context;
 
-            for (var i = 0; i < this.gameModel.orbs.length; i++) {
-                var orb = this.gameModel.orbs[i];
-                orb.render(context);
+            for (var i = 0; i < this.gameModel.pegs.length; i++) {
+                var peg = this.gameModel.pegs[i];
+                peg.render(context);
             }
         };
 
-        return OrbsPlane;
+        return PegsPlane;
     }
 )

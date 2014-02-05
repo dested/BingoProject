@@ -5,11 +5,11 @@ define([
 
 //planes
     './planes/background',
-    './planes/orbs',
+    './planes/pegs',
     './planes/cannon',
 
     './gameModel'
-], function (assetLoader, canvasUtils, ClickManager, BackgroundPlane, OrbsPlane, CannonPlane, GameModel) {
+], function (assetLoader, canvasUtils, ClickManager, BackgroundPlane, PegsPlane, CannonPlane, GameModel) {
 
 
     function GameBoard(boardWidth, boardHeight) {
@@ -18,7 +18,7 @@ define([
 
         //rendering planes
         this.backgroundPlane = new BackgroundPlane(this.gameModel);
-        this.orbsPlane = new OrbsPlane(this.gameModel);
+        this.pegsPlane = new PegsPlane(this.gameModel);
         this.cannonPlane = new CannonPlane(this.gameModel);
 
         this.gameModel.clickManager = new ClickManager(this.gameModel);
@@ -30,8 +30,8 @@ define([
         this.backgroundPlane.init();
         ballGameBoard.appendChild(this.backgroundPlane.plane.canvas);
 
-        this.orbsPlane.init();
-        ballGameBoard.appendChild(this.orbsPlane.plane.canvas);
+        this.pegsPlane.init();
+        ballGameBoard.appendChild(this.pegsPlane.plane.canvas);
 
         this.cannonPlane.init();
         ballGameBoard.appendChild(this.cannonPlane.plane.canvas);
@@ -42,13 +42,13 @@ define([
 
     GameBoard.prototype.render = function () {
         this.backgroundPlane.render();
-        this.orbsPlane.render();
+        this.pegsPlane.render();
         this.cannonPlane.render();
     };
 
     GameBoard.prototype.tick = function () {
         this.backgroundPlane.tick();
-        this.orbsPlane.tick();
+        this.pegsPlane.tick();
         this.cannonPlane.tick();
     };
 

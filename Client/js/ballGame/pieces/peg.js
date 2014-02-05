@@ -1,19 +1,19 @@
 define(['assetLoader'], function (assetLoader) {
-    function Orb(x, y) {
+    function Peg(x, y) {
         this.x = x;
         this.y = y;
         this.hit = false;
     }
 
-    Orb.prototype.render = function (context) {
+    Peg.prototype.render = function (context) {
         context.save();
         context.translate(this.x, this.y);
         var image;
         if (this.hit) {
-            image = assetLoader.getAsset('orbHit').image;
+            image = assetLoader.getAsset('pegHit').image;
         }
         else {
-            image = assetLoader.getAsset('orb').image;
+            image = assetLoader.getAsset('peg').image;
         }
         context.translate(-image.width / 2, -image.height / 2);
         context.drawImage(image,0,0);
@@ -21,5 +21,5 @@ define(['assetLoader'], function (assetLoader) {
         context.restore();
 
     };
-    return Orb;
+    return Peg;
 })
