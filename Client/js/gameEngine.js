@@ -32,8 +32,6 @@ define([
     assetLoader.pushAsset('cannon', '/images/cannons/shooter.png');
     assetLoader.pushAsset('cannonBall', '/images/cannonBalls/ball_noshine.png');
 
-    assetLoader.pushAsset('cannonRotateLeft', '/images/cannons/cannonRotateLeft.png');
-    assetLoader.pushAsset('cannonRotateRight', '/images/cannons/cannonRotateRight.png');
 
     assetLoader.loadAssets(startGame);
 

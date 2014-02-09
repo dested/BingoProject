@@ -1,58 +1,45 @@
-define(['assetLoader'], function (assetLoader) {
-    function CannonBall(gameModel, x, y, angle) {
+define(['assetLoader', './peg'], function (assetLoader, Peg) {
+    function CannonBall(gameBoard, gameModel, x, y, angle) {
+        this.gameBoard = gameBoard;
         this.gameModel = gameModel;
         this.x = x;
         this.y = y;
         this.angle = angle;
-        this.velocity = 5;
-
-        setInterval((function () {
-            this.tick();
-        }).bind(this), 1000 / 60);
+        this.velocity = 35;
+        this.body = undefined;
     }
 
+    CannonBall.prototype.init = function () {
+        this.body = this.gameBoard.pegPhysicsManager.createCannonBall(this.x, this.y, this.angle, this.velocity, this);
+
+
+    };
+    CannonBall.prototype.tick = function () {
+    };
+    CannonBall.prototype.collide = function (other) {
+        if (other instanceof Peg) {
+            other.trigger();
+        }
+    };
     CannonBall.prototype.render = function (context) {
+
+        var position = this.body.GetPosition();
+
+        var x = this.gameBoard.pegPhysicsManager.meterToPixel(position.x);
+        var y = this.gameBoard.pegPhysicsManager.meterToPixel(position.y);
+
+
         context.save();
-        context.translate(this.x, this.y);
+        context.translate(x, y);
         var image = assetLoader.getAsset('cannonBall').image;
         context.translate(-image.width / 2, -image.height / 2);
-        context.drawImage(image, 0, 0);
 
+        context.translate(image.width / 2, image.height / 2);
+        context.rotate(this.body.GetAngle());
+
+        context.drawImage(image, -image.width / 2, -image.height / 2);
         context.restore();
     };
-
-    CannonBall.prototype.tick = function () {
-        var image = assetLoader.getAsset('cannonBall').image;
-
-        this.x += Math.cos(this.angle * Math.PI / 180) * this.velocity;
-        this.y += Math.sin(this.angle * Math.PI / 180) * this.velocity;
-
-        var cannonBallBox = {x: this.x - image.width / 2, y: this.y - image.height / 2, width: image.width, height: image.height};
-/*
-        for (var i = 0; i < ballPieces.length; i++) {
-            var ballPiece = ballPieces[i];
-            if (!ballPiece.hit) {
-                var pieceBox = {x: ballPiece.x - ball.width / 2, y: ballPiece.y - ball.height / 2, width: ball.width, height: ball.height};
-                if (boxCollides(pieceBox, cannonBallBox)) {
-                    ballPiece.hit = true;
-                }
-            }
-        }
-
-
-        for (var i = 0; i < collisions.length; i++) {
-            var collision = collisions[i];
-            if (currentCannonBall.lastCollision === collision) {
-                continue;
-            }
-            if (circleLineCollision(new Vector(currentCannonBall), cannonBall.width / 2, collision.point1, collision.point2)) {
-                currentCannonBall.angle = reflect(new Vector(currentCannonBall.angle), collision.vector);
-                currentCannonBall.lastCollision = collision;
-            }
-        }*/
-
-    };
-
 
     return CannonBall;
 });

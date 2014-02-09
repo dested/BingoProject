@@ -5,9 +5,10 @@ define(
         '../pieces/cannonBall'
     ],
     function (canvasUtils, Cannon, CannonBall) {
-        function CannonPlane(gameModel) {
+        function CannonPlane(gameBoard,gameModel) {
             this.plane = undefined; //canvas plane
             this.gameModel = gameModel;
+            this.gameBoard = gameBoard;
 
             this.cannon = new Cannon(this.gameModel, this);
         }
@@ -24,10 +25,6 @@ define(
 
             context.save();
 
-            if (this.gameModel.cannonBall) {
-                this.gameModel.cannonBall.render(context);
-            }
-
             this.cannon.render(context);
 
             context.restore();
@@ -35,16 +32,12 @@ define(
 
         CannonPlane.prototype.tick = function () {
 
-            if (this.gameModel.cannonBall) {
-                this.gameModel.cannonBall.tick(context);
-            }
-
             this.cannon.tick();
         };
 
 
         CannonPlane.prototype.shootBall = function () {
-            this.gameModel.cannonBall = new CannonBall(this.gameModel, this.gameModel.cannonLocation.x, this.gameModel.cannonLocation.y, this.gameModel.cannonAngle+90);
+            this.gameBoard.fireCannon()
         };
 
         return CannonPlane;

@@ -7,45 +7,15 @@ define(
         function Cannon(gameModel, canonPlane) {
             this.gameModel = gameModel;
             this.cannonAsset = undefined;
-            this.cannonRotateLeftAsset = undefined;
-            this.cannonRotateRightAsset = undefined;
-
-            this.moveCannon = undefined;
-
             this.canonPlane = canonPlane;
+            this.movingCannon = false;
         }
 
 
         Cannon.prototype.init = function () {
             this.cannonAsset = assetLoader.getAsset('cannon');
-            this.cannonRotateLeftAsset = assetLoader.getAsset('cannonRotateLeft');
-            this.cannonRotateRightAsset = assetLoader.getAsset('cannonRotateRight');
 
             var cannonButton = this.gameModel.cannonLocation;
-            var cannonLeftButton = this.gameModel.cannonLeftButton;
-            var cannonRightButton = this.gameModel.cannonRightButton;
-
-            this.gameModel.clickManager.pushClickRect(
-                new ClickRect(
-                    cannonLeftButton.x - this.cannonRotateLeftAsset.image.width / 2,
-                    cannonLeftButton.y - this.cannonRotateLeftAsset.image.height / 2,
-                    this.cannonRotateLeftAsset.image.width,
-                    this.cannonRotateLeftAsset.image.height,
-                    this,
-                    this.rotateLeft
-                )
-            );
-
-            this.gameModel.clickManager.pushClickRect(
-                new ClickRect(
-                    cannonRightButton.x - this.cannonRotateRightAsset.image.width / 2,
-                    cannonRightButton.y - this.cannonRotateRightAsset.image.height / 2,
-                    this.cannonRotateRightAsset.image.width,
-                    this.cannonRotateRightAsset.image.height,
-                    this,
-                    this.rotateRight
-                )
-            );
 
             this.gameModel.clickManager.pushClickRect(
                 new ClickRect(
@@ -57,16 +27,25 @@ define(
                     this.shootBall
                 )
             );
+
+            this.gameModel.clickManager.pushClickRect(
+                new ClickRect(
+                    0,
+                    0,
+                    this.gameModel.boardWidth,
+                    this.gameModel.boardHeight / 2,
+                    this,
+                    this.rotateClick
+                )
+            );
+
+
         };
 
         Cannon.prototype.render = function (context) {
             var cannonLocation = this.gameModel.cannonLocation;
-            var cannonLeftButton = this.gameModel.cannonLeftButton;
-            var cannonRightButton = this.gameModel.cannonRightButton;
 
             var cannonImage = this.cannonAsset.image;
-            var cannonRotateLeftAsset = this.cannonRotateLeftAsset.image;
-            var cannonRotateRightAsset = this.cannonRotateRightAsset.image;
 
             context.save();
             context.translate(cannonLocation.x, cannonLocation.y);
@@ -75,42 +54,33 @@ define(
             context.restore();
 
 
-            context.save();
-            context.translate(cannonLeftButton.x, cannonLeftButton.y);
-            context.translate(-cannonRotateLeftAsset.width / 2, -cannonRotateLeftAsset.height / 2);
-            context.drawImage(cannonRotateLeftAsset, 0, 0);
-            context.restore();
-
-
-            context.save();
-            context.translate(cannonRightButton.x, cannonRightButton.y);
-            context.translate(-cannonRotateRightAsset.width / 2, -cannonRotateRightAsset.height / 2);
-            context.drawImage(cannonRotateRightAsset, 0, 0);
-            context.restore();
-
         };
 
         Cannon.prototype.tick = function () {
-            if (this.moveCannon) {
-                this.gameModel.cannonAngle += this.moveCannon;
-            }
-        };
-        Cannon.prototype.rotateLeft = function (eventType, clickBox, x, y) {
-            this.moveCannon = undefined;
-            switch (eventType) {
-                case 'mouseDown':
-                    this.moveCannon = +1;
-                    break;
-            }
+
         };
 
-        Cannon.prototype.rotateRight = function (eventType, clickBox, x, y) {
-            this.moveCannon = undefined;
+        Cannon.prototype.rotateClick = function (eventType, clickBox, x, y) {
+
+
             switch (eventType) {
+                case 'mouseUp':
+                    this.movingCannon = false;
+                    break;
                 case 'mouseDown':
-                    this.moveCannon = -1;
+                    this.movingCannon = true;
+                case 'mouseMove':
+                    if (this.movingCannon) {
+
+                        var angle = (Math.atan2(y - this.gameModel.cannonLocation.y, x - this.gameModel.cannonLocation.x) * 180 / Math.PI)-90;
+
+                        this.gameModel.cannonAngle = angle;
+                    }
                     break;
             }
+
+            if (this.gameModel.cannonAngle < -30)this.gameModel.cannonAngle = -30;
+            if (this.gameModel.cannonAngle > 30)this.gameModel.cannonAngle = 30;
         };
 
         Cannon.prototype.shootBall = function (eventType, clickBox, x, y, collide) {
@@ -118,6 +88,7 @@ define(
                 case 'mouseUp':
                     if (collide) {
                         this.canonPlane.shootBall();
+                        return true;
                     }
                     break;
             }

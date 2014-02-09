@@ -11,8 +11,8 @@ document.body.appendChild(stats.domElement);
 var canvas;
 var context;
 
-var boardWidth = 438;
-var boardHeight = 548;//todo: to object
+var boardWidth = 430;
+var boardHeight = 557;//todo: to object
 
 
 var backgroundImage;
@@ -27,24 +27,28 @@ var collisions = [];
 var currentCannonBall;
 var angleWatchers = [];
 
-
+var meterPixelScale = 16;
 var world;
 
-function init() {
-    var b2Vec2 = Box2D.Common.Math.b2Vec2
-        , b2BodyDef = Box2D.Dynamics.b2BodyDef
-        , b2Body = Box2D.Dynamics.b2Body
-        , b2FixtureDef = Box2D.Dynamics.b2FixtureDef
-        , b2Fixture = Box2D.Dynamics.b2Fixture
-        , b2World = Box2D.Dynamics.b2World
-        , b2MassData = Box2D.Collision.Shapes.b2MassData
-        , b2PolygonShape = Box2D.Collision.Shapes.b2PolygonShape
-        , b2CircleShape = Box2D.Collision.Shapes.b2CircleShape
-        , b2DebugDraw = Box2D.Dynamics.b2DebugDraw
-        ;
+var b2Vec2 = Box2D.Common.Math.b2Vec2
+    , b2BodyDef = Box2D.Dynamics.b2BodyDef
+    , b2Body = Box2D.Dynamics.b2Body
+    , b2FixtureDef = Box2D.Dynamics.b2FixtureDef
+    , b2Fixture = Box2D.Dynamics.b2Fixture
+    , b2World = Box2D.Dynamics.b2World
+    , b2MassData = Box2D.Collision.Shapes.b2MassData
+    , b2PolygonShape = Box2D.Collision.Shapes.b2PolygonShape
+    , b2CircleShape = Box2D.Collision.Shapes.b2CircleShape
+    , b2DebugDraw = Box2D.Dynamics.b2DebugDraw
+    ;
 
+
+var widthMeters = boardWidth / meterPixelScale;
+var heightMeters = boardHeight / meterPixelScale;
+
+function init() {
     world = new b2World(
-        new b2Vec2(0, 10)    //gravity
+        new b2Vec2(0, 35)    //gravity
         , true                 //allow sleep
     );
 
@@ -57,10 +61,11 @@ function init() {
 
     //create ground
     bodyDef.type = b2Body.b2_staticBody;
-    bodyDef.position.x = 10;
-    bodyDef.position.y = 25;
+
+    bodyDef.position.x = widthMeters / 2;
+    bodyDef.position.y = heightMeters;
     fixDef.shape = new b2PolygonShape;
-    fixDef.shape.SetAsBox(10, .5);
+    fixDef.shape.SetAsBox(widthMeters / 2, .1);
     (body = world.CreateBody(bodyDef)).CreateFixture(fixDef);
     body.SetUserData(100);
 
@@ -68,43 +73,34 @@ function init() {
 
     bodyDef.type = b2Body.b2_staticBody;
     bodyDef.position.x = 0;
-    bodyDef.position.y = 15;
+    bodyDef.position.y = 0;
     fixDef.shape = new b2PolygonShape;
-    fixDef.shape.SetAsBox(.5, 15);
+    fixDef.shape.SetAsBox(.1, heightMeters );
     (body = world.CreateBody(bodyDef)).CreateFixture(fixDef);
     body.SetUserData(101);
 
     var bodyDef = new b2BodyDef;
     bodyDef.type = b2Body.b2_staticBody;
-    bodyDef.position.x = 20;
-    bodyDef.position.y = 15;
+    bodyDef.position.x = widthMeters;
+    bodyDef.position.y = 0;
     fixDef.shape = new b2PolygonShape;
-    fixDef.shape.SetAsBox(.5, 15);
+    fixDef.shape.SetAsBox(.1, heightMeters );
     (body = world.CreateBody(bodyDef)).CreateFixture(fixDef);
     body.SetUserData(102);
 
     var fixDef = new b2FixtureDef;
-    fixDef.density = 5.0;
-    fixDef.friction = 0.5;
-    fixDef.restitution = .8;
-
-    var bodyDef = new b2BodyDef;
-    //create some objects
-    bodyDef.type = b2Body.b2_dynamicBody;
-    fixDef.shape = new b2CircleShape(.3);
-    bodyDef.position.x = 11;
-    bodyDef.position.y = 1;
-    (body = world.CreateBody(bodyDef)).CreateFixture(fixDef);
-    body.SetUserData(4);
+    fixDef.density = 50.0;
+    fixDef.friction = 1;
+    fixDef.restitution = .75;
 
 
     var bodyDef = new b2BodyDef;
     bodyDef.type = b2Body.b2_staticBody;
-    for (var i = 0; i < 60; ++i) {
+    for (var i = 0; i < 50; ++i) {
 
-        fixDef.shape = new b2CircleShape(.6);
-        bodyDef.position.x = Math.random() * 18 + 1;
-        bodyDef.position.y = Math.random() * 15 + 1+5;
+        fixDef.shape = new b2CircleShape(1 / 2);
+        bodyDef.position.x = Math.random() * (widthMeters - 4) + 2;
+        bodyDef.position.y = Math.random() * (heightMeters - 12) + 8;
 
         (body = world.CreateBody(bodyDef)).CreateFixture(fixDef);
         body.SetUserData(3);
@@ -113,13 +109,46 @@ function init() {
 
     var myListener = new Box2D.Dynamics.b2ContactListener;
 
-    myListener.EndContact = function(fixture) {
-        if(fixture.GetFixtureA().GetBody().GetUserData()==4 && fixture.GetFixtureB().GetBody().GetUserData()==3){
-            fixture.GetFixtureB().GetBody().SetUserData(5)
+    myListener.EndContact = function (fixture) {
+        if (fixture.GetFixtureA().GetBody().GetUserData() == 4 && fixture.GetFixtureB().GetBody().GetUserData() == 3) {
+            var bd = fixture.GetFixtureB().GetBody();
+            bd.SetUserData(5);
+            /*
+             var bjd=fixture.GetFixtureA().GetBody();
+             bjd.ApplyImpulse(new b2Vec2(0, -500),bjd.GetWorldCenter());*/
+
+            var j = function (ccb) {
+               setTimeout(function () {
+               //     world.DestroyBody(ccb)
+                }, 100);
+            };
+            j(bd);
+
+        }
+        if (fixture.GetFixtureA().GetBody().GetUserData() == 100 && fixture.GetFixtureB().GetBody().GetUserData() == 4) {
+            var bd = fixture.GetFixtureB().GetBody();
+
+            /*      var j = function (ccb) {
+             setTimeout(function () {
+             bd.SetPosition({x: bd.GetPosition().x, y: 2});
+             }, 17);
+             };
+             j(bd);*/
+
+
         }
     }
 
     world.SetContactListener(myListener);
+
+    var debugDraw = new b2DebugDraw();
+    debugDraw.SetSprite(canvas.getContext("2d"));
+    debugDraw.SetDrawScale(meterPixelScale);
+    debugDraw.SetFillAlpha(1);
+    debugDraw.SetLineThickness(1.0);
+    debugDraw.SetFlags(b2DebugDraw.e_shapeBit | b2DebugDraw.e_jointBit);
+    world.SetDebugDraw(debugDraw);
+
 
 }
 
@@ -174,12 +203,36 @@ function start() {
     };
     canvas.onclick = function (ev) {
         if (ev.y > boardHeight / 2) {
-            currentCannonBall = {
-                x: 160 + cannon.width / 2,
-                y: 0,
-                angle: rotate + 90,
-                velocity: 15
-            };//todo: to object
+            /* currentCannonBall = {
+             x: 160 + cannon.width / 2,
+             y: 0,
+             angle: rotate + 90,
+             velocity: 15
+             };//todo: to object*/
+
+
+            var fixDef = new b2FixtureDef;
+            fixDef.density = 1;
+            fixDef.friction = 1;
+            fixDef.restitution = 1;
+
+            var vx = Math.cos((rotate + 90) * Math.PI / 180) * 35;
+            var vy = Math.sin((rotate + 90) * Math.PI / 180) * 35;
+
+            var offvx = Math.cos((rotate + 90) * Math.PI / 180) * 9;
+            var offvy = Math.sin((rotate + 90) * Math.PI / 180) * 3;
+
+            var bodyDef = new b2BodyDef;
+            //create some objects
+            bodyDef.type = b2Body.b2_dynamicBody;
+            fixDef.shape = new b2CircleShape(1.25 / 2);
+            bodyDef.position.x = widthMeters / 2 + offvx;
+            bodyDef.position.y = 0 + offvy;
+            var body;
+            (body = world.CreateBody(bodyDef)).CreateFixture(fixDef);
+            body.SetUserData(4);
+
+            body.ApplyImpulse(new b2Vec2(vx, vy), body.GetWorldCenter());
 
 
             return;
@@ -205,16 +258,16 @@ function drawBackground(context) {
 }
 function drawCannon(context) {
     context.save();
-    context.translate(160, -cannon.height / 2);
-    context.translate(cannon.width / 2, cannon.height / 2);
+    context.translate(boardWidth / 2 - cannon.width / 2, 0);
+    context.translate(cannon.width / 2, -cannon.height);
     context.rotate(rotate * Math.PI / 180);
-    context.drawImage(cannon, -cannon.width / 2, -cannon.height / 2);
+    context.drawImage(cannon, -cannon.width / 2, cannon.height);
 
     context.restore();
 }
 function metersToPixel(meter) {
 
-    return meter * 21.5;
+    return meter * meterPixelScale;
 }
 
 function drawBalls(context) {
@@ -230,7 +283,7 @@ function drawBalls(context) {
         context.save();
         context.translate(x, y);
         var ballImage;
-        if (body.GetUserData()==5) {
+        if (body.GetUserData() == 5) {
             ballImage = ballHit;
         }
         else {
@@ -259,11 +312,11 @@ function drawCannonBall(context) {
         var x = metersToPixel(position.x);
         var y = metersToPixel(position.y);
         context.save();
-        context.translate(x, y);
+        context.translate(x - cannonBall.width / 2, y - cannonBall.height / 2);
 
-
-        context.translate(-cannonBall.width / 2, -cannonBall.height / 2);
-        context.drawImage(cannonBall, 0, 0);
+        context.translate(cannonBall.width / 2, cannonBall.height / 2);
+        context.rotate(body.GetAngle());
+        context.drawImage(cannonBall, -cannonBall.width / 2, -cannonBall.height / 2);
 
 
         context.restore();
@@ -277,37 +330,37 @@ function drawCannonBall(context) {
 
 function render() {
     context.clearRect(0, 0, boardWidth, boardHeight);
+
     drawBackground(context);
     drawBalls(context);
 
     drawCannonBall(context);
     drawCannon(context);
-/*
 
-    var body;
-    for (body = world.GetBodyList(); body; body = body.GetNext()) {
-        var position = body.GetPosition();
-        if (body.GetUserData() < 100)continue;
+    /* var body;
+     for (body = world.GetBodyList(); body; body = body.GetNext()) {
+     var position = body.GetPosition();
+     if (body.GetUserData() < 100)continue;
 
-        var f = body.GetFixtureList().GetAABB();
+     var f = body.GetFixtureList().GetAABB();
 
-        context.save();
-        switch(body.GetUserData()){
-            case 100:
-                context.fillStyle = 'green';
-                break;
-            case 101:
-                context.fillStyle = 'red';
-                break;
-            case 102:
-                context.fillStyle = 'blue';
-                break;
-        }
-        context.fillRect(metersToPixel(f.lowerBound.x), metersToPixel(f.lowerBound.y),
-                         metersToPixel(f.upperBound.x-f.lowerBound.x), metersToPixel(f.upperBound.y-f.lowerBound.y));
-        context.restore();
+     context.save();
+     switch (body.GetUserData()) {
+     case 100:
+     context.fillStyle = 'green';
+     break;
+     case 101:
+     context.fillStyle = 'red';
+     break;
+     case 102:
+     context.fillStyle = 'blue';
+     break;
+     }
+     context.fillRect(metersToPixel(f.lowerBound.x), metersToPixel(f.lowerBound.y),
+     metersToPixel(f.upperBound.x - f.lowerBound.x), metersToPixel(f.upperBound.y - f.lowerBound.y));
+     context.restore();
 
-    }*/
+     }*/
 
 
     /*
@@ -324,10 +377,12 @@ function tick() {
 
 
         if (clickingEv.x < boardWidth / 2) {
-            rotate += 1;
+            if (rotate < 30)
+                rotate += 1;
         }
         if (clickingEv.x > boardWidth / 2) {
-            rotate -= 1;
+            if (rotate > -30)
+                rotate -= 1;
         }
 
 

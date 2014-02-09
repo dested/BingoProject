@@ -20,9 +20,24 @@ define(
             this.element.onmousedown = (function (evt) {
                 this.processMouseEvent('mouseDown', evt)
             }).bind(this);
+            this.element.ontouchstart = (function (evt) {
+                this.processMouseEvent('mouseDown', evt)
+            }).bind(this);
 
             this.element.onmouseup = (function (evt) {
                 this.processMouseEvent('mouseUp', evt)
+            }).bind(this);
+
+            this.element.ontouchend = (function (evt) {
+                this.processMouseEvent('mouseUp', evt)
+            }).bind(this);
+
+            this.element.onmousemove = (function (evt) {
+                this.processMouseEvent('mouseMove', evt)
+            }).bind(this);
+
+            this.element.ontouchmove = (function (evt) {
+                this.processMouseEvent('mouseMove', evt)
             }).bind(this);
         };
 
@@ -32,16 +47,20 @@ define(
             if (eventType == 'mouseUp') {
                 for (var i = 0; i < this.clickRects.length; i++) {
                     var clickRect = this.clickRects[i];
-                    clickRect.eventToTrigger.call(clickRect.instance, eventType, clickRect, clickRect.x - x, clickRect.y - y, clickRect.collides(x, y));
+                    clickRect.eventToTrigger.call(clickRect.instance, eventType, clickRect, x - clickRect.x, y - clickRect.y, clickRect.collides(x, y));//ignore result for mouseup
+
                 }
             } else {
                 for (var i = 0; i < this.clickRects.length; i++) {
                     var clickRect = this.clickRects[i];
                     if (clickRect.collides(x, y)) {
-                        clickRect.eventToTrigger.call(clickRect.instance, eventType, clickRect, clickRect.x - x, clickRect.y - y);
+                        if (clickRect.eventToTrigger.call(clickRect.instance, eventType, clickRect, x - clickRect.x, y - clickRect.y)) {
+                            break;
+                        }
                     }
                 }
             }
+            evt.preventDefault();
         };
 
         return ClickManager;
