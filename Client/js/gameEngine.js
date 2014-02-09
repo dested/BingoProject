@@ -2,7 +2,7 @@ define([
     'assetLoader',
     './ballGame/gameBoard',
     './utils/xStats'
-], function ( assetLoader,GameBoard) {
+], function (assetLoader, GameBoard) {
 
 
     function startGame() {
@@ -26,7 +26,7 @@ define([
     }
 
     assetLoader.pushAsset('board', '/images/gameBoards/board1.png');
-    assetLoader.pushAsset('peg', '/images/pegs/blue_peg.png');
+    assetLoader.pushAsset('peg', '/images/pegs/blue_peg.png', {x: 13, y: 9});
     assetLoader.pushAsset('pegHit', '/images/pegs/blue_peg_lit_overlay.png');
 
     assetLoader.pushAsset('cannon', '/images/cannons/shooter.png');
@@ -46,6 +46,10 @@ define([
     assetLoader.pushAsset('chuteRedBucketLit', '/images/chutes/red_bucket_lit.png');
     assetLoader.pushAsset('chuteYellowBucketLit', '/images/chutes/yellow_bucket_lit.png');
     assetLoader.pushAsset('chuteBlueBucketLit', '/images/chutes/blue_bucket_lit.png');
+
+    assetLoader.pushAsset('jackpotOverlay', '/images/overlays/jackpot_shooter_overlay.png');
+    assetLoader.pushAsset('coinBoxOverlay', '/images/overlays/coin_box.png');
+    assetLoader.pushAsset('pullBoxOverlay', '/images/overlays/pulls_button.png');
 
 
     assetLoader.loadAssets(startGame);

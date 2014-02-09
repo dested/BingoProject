@@ -22,6 +22,7 @@ define(['assetLoader', './peg', './chute'], function (assetLoader, Peg, Chute) {
     };
     CannonBall.prototype.collide = function (other) {
         if (other instanceof Peg) {
+
             other.trigger();
         }
 

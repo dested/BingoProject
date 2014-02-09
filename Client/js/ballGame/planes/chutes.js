@@ -105,10 +105,10 @@ define(
 
 
         };
-        ChutesPlane.prototype.roundOver = function () {
+        ChutesPlane.prototype.roundOver = function (finished) {
             for (var i = 0; i < this.chutes.length; i++) {
                 var chute = this.chutes[i];
-                chute.triggered=false;
+                chute.roundOver(finished);
             }
 
 

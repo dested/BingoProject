@@ -33,7 +33,7 @@ define(
                     0,
                     0,
                     this.gameModel.boardWidth,
-                    this.gameModel.boardHeight / 2,
+                    this.gameModel.boardHeight,
                     this,
                     this.rotateClick
                 )

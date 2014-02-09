@@ -15,12 +15,12 @@ define(
 
         };
 
-        PegsPlane.prototype.roundOver = function () {
-            for (var i = this.gameModel.pegs.length-1; i >=0; i--) {
+        PegsPlane.prototype.roundOver = function (finished) {
+            for (var i = this.gameModel.pegs.length - 1; i >= 0; i--) {
                 var peg = this.gameModel.pegs[i];
-                if(peg.hit){
-                    peg.destroy();
-                    this.gameModel.pegs.splice(i,1);
+                peg.roundOver(finished);
+                if (finished && peg.hit) {
+                    this.gameModel.pegs.splice(i, 1);
                 }
             }
         };
@@ -29,7 +29,7 @@ define(
             for (var i = 0; i < pegLocations.length; i++) {
                 var loc = pegLocations[i];
                 var peg;
-                this.gameModel.pegs.push(peg=new Peg(this.gameBoard, loc.x, loc.y));
+                this.gameModel.pegs.push(peg = new Peg(this.gameBoard, this.gameModel, loc.x, loc.y));
                 peg.init();
             }
         };
@@ -44,6 +44,12 @@ define(
             for (var i = 0; i < this.gameModel.pegs.length; i++) {
                 var peg = this.gameModel.pegs[i];
                 peg.render(context);
+            }
+
+
+            for (var i = 0; i < this.gameModel.pegs.length; i++) {
+                var peg = this.gameModel.pegs[i];
+                peg.renderText(context);
             }
         };
 
