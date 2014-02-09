@@ -42,8 +42,20 @@ define(
         };
 
         ClickManager.prototype.processMouseEvent = function (eventType, evt) {
-            var x = evt.offsetX;
-            var y = evt.offsetY;
+            var x , y;
+
+            if (evt.touches) {
+                if (evt.touches.length > 0) {
+                    x = evt.touches[0].pageX - evt.touches[0].target.offsetLeft;
+                    y = evt.touches[0].pageY - evt.touches[0].target.offsetTop;
+                }else{
+                    x = evt.changedTouches[0].pageX - evt.changedTouches[0].target.offsetLeft;
+                    y = evt.changedTouches[0].pageY - evt.changedTouches[0].target.offsetTop;
+                }
+            } else {
+                x = evt.pageX - evt.target.offsetLeft;
+                y = evt.pageY - evt.target.offsetTop;
+            }
             if (eventType == 'mouseUp') {
                 for (var i = 0; i < this.clickRects.length; i++) {
                     var clickRect = this.clickRects[i];
