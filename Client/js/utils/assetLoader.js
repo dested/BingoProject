@@ -36,6 +36,8 @@ define(
             this.location = location;//url
             this.loaded = false;//has it loaded
             this.image = undefined;//html image
+            this.width=NaN;
+            this.height=NaN;
         }
 
 
@@ -44,6 +46,8 @@ define(
             image.src = asset.location;
             image.onload = function () {
                 asset.image = image;
+                asset.width=image.width;
+                asset.height=image.height;
                 done();
             };
             return image;

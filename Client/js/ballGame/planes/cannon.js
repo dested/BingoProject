@@ -1,10 +1,9 @@
 define(
     [
         'canvasUtils',
-        '../pieces/cannon',
-        '../pieces/cannonBall'
+        '../pieces/cannon'
     ],
-    function (canvasUtils, Cannon, CannonBall) {
+    function (canvasUtils, Cannon) {
         function CannonPlane(gameBoard,gameModel) {
             this.plane = undefined; //canvas plane
             this.gameModel = gameModel;
@@ -17,6 +16,9 @@ define(
             this.plane = canvasUtils.createCanvas(this.gameModel.boardWidth, this.gameModel.boardHeight);
 
             this.cannon.init();
+        };
+        CannonPlane.prototype.roundOver = function () {
+            this.gameModel.cannonAngle=0;
         };
 
         CannonPlane.prototype.render = function () {

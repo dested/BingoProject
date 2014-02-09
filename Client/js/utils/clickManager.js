@@ -54,7 +54,7 @@ define(
                 for (var i = 0; i < this.clickRects.length; i++) {
                     var clickRect = this.clickRects[i];
                     if (clickRect.collides(x, y)) {
-                        if (clickRect.eventToTrigger.call(clickRect.instance, eventType, clickRect, x - clickRect.x, y - clickRect.y)) {
+                        if (clickRect.eventToTrigger.call(clickRect.instance, eventType, clickRect, x - clickRect.x, y - clickRect.y, true)) {
                             break;
                         }
                     }

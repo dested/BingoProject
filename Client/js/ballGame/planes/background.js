@@ -12,6 +12,8 @@ define(['canvasUtils'], function (canvasUtils) {
 
         BackgroundPlane.prototype.tick = function () {
         };
+        BackgroundPlane.prototype.roundOver = function () {
+        };
 
         BackgroundPlane.prototype.render = function () {
             if (this._drawnBackground !== this.gameModel.background) {

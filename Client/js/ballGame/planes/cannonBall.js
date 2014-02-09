@@ -14,7 +14,11 @@ define(
         CannonBallPlane.prototype.init = function () {
             this.plane = canvasUtils.createCanvas(this.gameModel.boardWidth, this.gameModel.boardHeight);
         };
+        CannonBallPlane.prototype.roundOver = function () {
+            this.cannonBall = undefined;
+            this.plane.clear();
 
+        };
         CannonBallPlane.prototype.render = function () {
             if (this.cannonBall) {
                 this.plane.clear();

@@ -15,10 +15,6 @@ define(
             this.cannonLocation = {x: this.boardWidth / 2, y: 0};
             this.cannonAngle = 0;
 
-            this.cannonLeftButton = {x: this.boardWidth / 2 - this.boardWidth / 4, y: 100};
-            this.cannonRightButton = {x: this.boardWidth / 2 + this.boardWidth / 4, y: 100};
-
-
             this.clickManager = undefined;
         }
 

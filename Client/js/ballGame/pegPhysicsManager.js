@@ -24,10 +24,9 @@ define([        'canvasUtils'], function (canvasUtils) {
         this.plane = canvasUtils.createCanvas(this.gameModel.boardWidth, this.gameModel.boardHeight);
 
 
-        this.createRectangleWall(0, -this.gameModel.boardHeight, 1, this.gameModel.boardHeight * 2);
-        this.createRectangleWall(this.gameModel.boardWidth, -this.gameModel.boardHeight, 1, this.gameModel.boardHeight * 2);
-
-        this.createRectangleWall(0, this.gameModel.boardHeight, this.gameModel.boardWidth, 1);
+        this.createRectangleWall(0, -this.gameModel.boardHeight, 1, this.gameModel.boardHeight * 2, 'wall');
+        this.createRectangleWall(this.gameModel.boardWidth, -this.gameModel.boardHeight, 1, this.gameModel.boardHeight * 2, 'wall');
+        this.createRectangleWall(0, this.gameModel.boardHeight, this.gameModel.boardWidth, 1, 'wall');
 
         if (this.shouldDraw) {
             var debugDraw = new b2DebugDraw();
@@ -39,34 +38,44 @@ define([        'canvasUtils'], function (canvasUtils) {
             this.world.SetDebugDraw(debugDraw);
         }
 
-
+        this.collisions = [];
         var myListener = new b2ContactListener;
 
-        myListener.EndContact = function (fixture) {
-
+        myListener.BeginContact = (function (fixture) {
+            console.log('collide: ', fixture.GetFixtureA().GetBody().GetUserData(), 'and', fixture.GetFixtureB().GetBody().GetUserData())
             if (fixture.GetFixtureA().GetBody().GetUserData()) {
                 if (fixture.GetFixtureA().GetBody().GetUserData().collide) {
-                    fixture.GetFixtureA().GetBody().GetUserData().collide(fixture.GetFixtureB().GetBody().GetUserData());
+                    this.collisions.push({bodyA: fixture.GetFixtureA().GetBody(), bodyB: fixture.GetFixtureB().GetBody()});
                 }
             }
 
             if (fixture.GetFixtureB().GetBody().GetUserData()) {
                 if (fixture.GetFixtureB().GetBody().GetUserData().collide) {
-                    fixture.GetFixtureB().GetBody().GetUserData().collide(fixture.GetFixtureB().GetBody().GetUserData());
+                    this.collisions.push({bodyA: fixture.GetFixtureB().GetBody(), bodyB: fixture.GetFixtureA().GetBody()});
                 }
             }
 
-        };
+        }).bind(this);
+
 
         this.world.SetContactListener(myListener);
 
 
     };
     PegPhysicsManager.prototype.tick = function () {
+        this.collisions = [];
 
         this.world.Step(1 / 60, 10, 10);
-
         this.world.ClearForces();
+
+        for (var i = 0; i < this.collisions.length; i++) {
+            var collision = this.collisions[i];
+            collision.bodyA.GetUserData().collide(collision.bodyB.GetUserData());
+
+        }
+    };
+
+    PegPhysicsManager.prototype.roundOver = function () {
     };
 
     PegPhysicsManager.prototype.render = function () {
@@ -77,11 +86,11 @@ define([        'canvasUtils'], function (canvasUtils) {
     };
 
 
-    PegPhysicsManager.prototype.createRectangleWall = function (x, y, width, height) {
+    PegPhysicsManager.prototype.createRectangleWall = function (x, y, width, height, userData) {
         var fixDef = new b2FixtureDef;
         fixDef.density = 1;
         fixDef.friction = 1;
-        fixDef.restitution = 1;
+        fixDef.restitution = .6;
 
         var bodyDef = new b2BodyDef;
         bodyDef.type = b2Body.b2_staticBody;
@@ -91,25 +100,43 @@ define([        'canvasUtils'], function (canvasUtils) {
         fixDef.shape.SetAsBox(this.pixelToMeter(width) / 2, this.pixelToMeter(height) / 2);
         var body = this.world.CreateBody(bodyDef);
         body.CreateFixture(fixDef);
-        body.SetUserData('wall');
+        body.SetUserData(userData);
         return body;
     };
-    PegPhysicsManager.prototype.createCircleWall = function (x, y, rad) {
+    PegPhysicsManager.prototype.createRectangleSensor = function (x, y, width, height, userData) {
+        var fixDef = new b2FixtureDef;
+        fixDef.density = 1;
+        fixDef.friction = 1;
+        fixDef.restitution = .6;
+
+        var bodyDef = new b2BodyDef;
+        bodyDef.type = b2Body.b2_staticBody;
+        bodyDef.position.x = this.pixelToMeter(x) + this.pixelToMeter(width) / 2;
+        bodyDef.position.y = this.pixelToMeter(y) + this.pixelToMeter(height) / 2;
+        fixDef.shape = new b2PolygonShape;
+        fixDef.shape.SetAsBox(this.pixelToMeter(width) / 2, this.pixelToMeter(height) / 2);
+        var body = this.world.CreateBody(bodyDef);
+        var fixture = body.CreateFixture(fixDef);
+        fixture.SetSensor(true);
+        body.SetUserData(userData);
+        return body;
+    };
+    PegPhysicsManager.prototype.createCircleWall = function (x, y, rad, userData) {
 
         var fixDef = new b2FixtureDef;
         fixDef.density = 1;
         fixDef.friction = 1;
-        fixDef.restitution = 1;
+        fixDef.restitution = .6;
 
         var bodyDef = new b2BodyDef;
         bodyDef.type = b2Body.b2_staticBody;
 
-        fixDef.shape = new b2CircleShape(this.getMeterPixelSize(rad) / 2);
+        fixDef.shape = new b2CircleShape(this.pixelToMeter(rad));
         bodyDef.position.x = this.pixelToMeter(x);
         bodyDef.position.y = this.pixelToMeter(y);
         var body = this.world.CreateBody(bodyDef);
         body.CreateFixture(fixDef);
-        body.SetUserData('wall');
+        body.SetUserData(userData);
         return body;
     };
 
@@ -118,7 +145,7 @@ define([        'canvasUtils'], function (canvasUtils) {
         var fixDef = new b2FixtureDef;
         fixDef.density = 1;
         fixDef.friction = 1;
-        fixDef.restitution = 1;
+        fixDef.restitution = .6;
 
         var bodyDef = new b2BodyDef;
         bodyDef.type = b2Body.b2_staticBody;
@@ -132,25 +159,30 @@ define([        'canvasUtils'], function (canvasUtils) {
         return body;
     };
 
-
+    PegPhysicsManager.prototype.destroyBody = function (body) {
+        this.world.DestroyBody(body);
+    };
     PegPhysicsManager.prototype.createCannonBall = function (x, y, angle, velocity, cannonBall) {
 
 
-        var vx = Math.cos((angle ) * Math.PI / 180) * velocity;
-        var vy = Math.sin((angle ) * Math.PI / 180) * velocity;
+        var vx = Math.cos((angle) * Math.PI / 180) * velocity;
+        var vy = Math.sin((angle) * Math.PI / 180) * velocity;
 
+
+        var offvx = Math.cos((angle) * Math.PI / 180) * 9*16;
+        var offvy = Math.sin((angle) * Math.PI / 180) * 3*16;
 
         var fixDef = new b2FixtureDef;
         fixDef.density = 1;
         fixDef.friction = 1;
-        fixDef.restitution = 1;
+        fixDef.restitution = .6;
 
         var bodyDef = new b2BodyDef;
         bodyDef.type = b2Body.b2_dynamicBody;
 
         fixDef.shape = new b2CircleShape(1.25 / 2);
-        bodyDef.position.x = this.pixelToMeter(x);
-        bodyDef.position.y = this.pixelToMeter(y);
+        bodyDef.position.x = this.pixelToMeter(x+offvx);
+        bodyDef.position.y = this.pixelToMeter(y+offvy);
         var body = this.world.CreateBody(bodyDef);
         body.CreateFixture(fixDef);
         body.SetUserData(cannonBall);

@@ -14,6 +14,16 @@ define(
             this.plane = canvasUtils.createCanvas(this.gameModel.boardWidth, this.gameModel.boardHeight);
 
         };
+
+        PegsPlane.prototype.roundOver = function () {
+            for (var i = this.gameModel.pegs.length-1; i >=0; i--) {
+                var peg = this.gameModel.pegs[i];
+                if(peg.hit){
+                    peg.destroy();
+                    this.gameModel.pegs.splice(i,1);
+                }
+            }
+        };
         PegsPlane.prototype.loadPegs = function (pegLocations) {
             this.gameModel.pegs = [];//todo if pegs not emtpy...
             for (var i = 0; i < pegLocations.length; i++) {

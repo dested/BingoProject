@@ -13,6 +13,9 @@ define(['assetLoader'], function (assetLoader) {
     Peg.prototype.trigger = function () {
         this.hit = true;
     };
+    Peg.prototype.destroy = function () {
+        this.gameBoard.pegPhysicsManager.destroyBody(this.body);
+    };
     Peg.prototype.render = function (context) {
         context.save();
         context.translate(this.x, this.y);
