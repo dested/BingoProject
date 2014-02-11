@@ -17,7 +17,9 @@ define(
         }
 
         Canvas.prototype.clear = function () {
-            this.canvas.width = this.canvas.width;
+            //this.canvas.width = this.canvas.width;
+                        this.context.clearRect(0,0,this.canvas.width,this.canvas.height);
+
         };
 
         return {

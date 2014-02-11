@@ -12,7 +12,7 @@ define(
             this.clickRects.push(clickRect);
         };
 
-        ClickManager.prototype.init = function () {
+        ClickManager.prototype.initClient = function () {
             this.element = document.createElement('div');
             this.element.className = 'clickManager';
             this.element.style.width = this.gameModel.boardWidth + 'px';

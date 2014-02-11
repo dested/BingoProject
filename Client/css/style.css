@@ -2,8 +2,18 @@ body {
   padding: 50px;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
+/*
 
+@viewport {
+    width: 430px;
+    height: 557px;
+}
 
+@-ms-viewport {
+    width: 430px;
+    height: 557px;
+}
+*/
 
 * {
     margin: 0;

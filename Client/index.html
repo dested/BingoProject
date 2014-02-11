@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html>
+<html ng-app="Game">
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=530px, height=557px, initial-scale=0.8, maximum-scale=1.2, user-scalable=0">
+    <meta name="viewport" content="width=430, height=620,  user-scalable=0">
 
     <title>Bingo Game</title>
     <link href="css/style.css" rel="stylesheet"/>
@@ -11,13 +11,19 @@
 </head>
 <body>
 <div style="" id="ballGameBoard"></div>
-
+<div ng-controller="BingoGameCtrl" style="position:absolute; right:0; top:0; width:300px; height:200px; border:solid 2px black; background-color:blue;">
+    hi{{shoes}}hi
+</div>
 <script type="text/javascript" src="libs/jquery/jquery-1.10.2.js"></script>
+
+<script type="text/javascript" src="libs/angular.js"></script>
+<script type="text/javascript" src="js/game.js"></script>
+
 <script type="text/javascript" src="libs/socketio/socket.io.js"></script>
 
 <script type="text/javascript" src="libs/lodash.underscore.min.js"></script>
-<script type="text/javascript" src="js/libs/stats.min.js"></script>
-<script type="text/javascript" src="js/libs/Box2dWeb-2.1.a.3.min.js"></script>
+<script type="text/javascript" src="libs/stats.min.js"></script>
+<script type="text/javascript" src="js/ballGame/libs/Box2dWeb-2.1.a.3.min.js"></script>
 <!--<script type="text/javascript" src="js/utils/Point.js"></script>-->
 
 <script type="text/javascript" src="libs/require/require.js" data-main="js/gameEngine.js"></script>

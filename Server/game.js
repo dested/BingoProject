@@ -1,12 +1,19 @@
-var io = require('socket.io').listen(999);
+var io = require('socket.io').listen(9999);
 console.log('game server started');
+
+var users = [];
+var games = [];
+
+
 io.sockets.on('connection', function (socket) {
     console.log('user joined');
 
-    io.sockets.emit('this', { will: 'be received by everyone'});
+    users.push({socket: socket});
 
-    socket.on('private message', function (from, msg) {
-        console.log('I received a private message by ', from, ' saying ', msg);
+    io.sockets.emit('news', {foo: 'bar'});
+
+    socket.on('other', function (from, msg) {
+        console.log(msg);
     });
 
     socket.on('disconnect', function () {
@@ -14,3 +21,5 @@ io.sockets.on('connection', function (socket) {
         io.sockets.emit('user disconnected');
     });
 });
+
+console.log('loaded');
