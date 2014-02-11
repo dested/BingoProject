@@ -2,25 +2,27 @@ define([
     'assetLoader',
     'canvasUtils',
     'clickManager',
-
+    'common.ballGame/gameBoard',
 //planes
-    './planes/background',
-    './planes/pegs',
-    './planes/cannon',
-    './planes/chutes',
-    './planes/cannonBall',
-    './planes/overlays',
+    './planes/clientBackgroundPlane',
+    './planes/clientPegsPlane',
+    './planes/clientCannonPlane',
+    './planes/clientChutesPlane',
+    './planes/clientCannonBallPlane',
+    './planes/clientOverlaysPlane',
 
-    './pegPhysicsManager',
-    './gameModel'
-], function (assetLoader, canvasUtils, ClickManager, BackgroundPlane, PegsPlane, CannonPlane, ChutesPlane, CannonBallPlane, OverlaysPlane, PegPhysicsManager, GameModel) {
+    './clientPegPhysicsManager',
+    './clientGameModel'
+], function (assetLoader, canvasUtils, ClickManager, //
+             GameBoard, //
+             BackgroundPlane, PegsPlane, CannonPlane, ChutesPlane, CannonBallPlane, OverlaysPlane, //
+             PegPhysicsManager, GameModel) {
 
 
-    function GameBoard(boardWidth, boardHeight) {
+    function ClientGameBoard(boardWidth, boardHeight) {
 
         this.gameModel = new GameModel(boardWidth, boardHeight);
 
-        //rendering planes
         this.backgroundPlane = new BackgroundPlane(this.gameModel);
         this.pegsPlane = new PegsPlane(this, this.gameModel);
         this.cannonBallPlane = new CannonBallPlane(this, this.gameModel);
@@ -32,26 +34,13 @@ define([
         this.gameModel.clickManager = new ClickManager(this.gameModel);
     }
 
-    GameBoard.prototype.init = function () {
+    ClientGameBoard.prototype.init = function () {
+        this.$super();
         var ballGameBoard = document.getElementById(this.gameModel.elementId);
 
-        this.pegPhysicsManager.init();
         this.backgroundPlane.init();
-        this.chutesPlane.init();
-        this.cannonBallPlane.init();
-        this.cannonPlane.init();
-        this.pegsPlane.init();
         this.overlaysPlane.init();
-
-
-        this.pegPhysicsManager.initClient();
-        this.backgroundPlane.initClient();
-        this.chutesPlane.initClient();
-        this.cannonBallPlane.initClient();
-        this.cannonPlane.initClient();
-        this.pegsPlane.initClient();
-        this.overlaysPlane.initClient();
-        this.gameModel.clickManager.initClient();
+        this.gameModel.clickManager.init();
 
         ballGameBoard.appendChild(this.backgroundPlane.plane.canvas);
         ballGameBoard.appendChild(this.chutesPlane.backPlane.canvas);
@@ -63,25 +52,9 @@ define([
         ballGameBoard.appendChild(this.pegPhysicsManager.plane.canvas);
         ballGameBoard.appendChild(this.gameModel.clickManager.element);
 
+    };
 
-        var pegLocs = [];
-        for (var i = 0; i < 200; i += 50) {
-            pegLocs.push({x: 62, y: 201 + i});
-            pegLocs.push({x: 101, y: 178 + i});
-            pegLocs.push({x: 145, y: 173 + i});
-            pegLocs.push({x: 188, y: 184 + i});
-            pegLocs.push({x: 226, y: 207 + i});
-            pegLocs.push({x: 262, y: 224 + i});
-            pegLocs.push({x: 301, y: 235 + i});
-            pegLocs.push({x: 345, y: 231 + i});
-            pegLocs.push({x: 380, y: 213 + i});
-        }
-        this.pegsPlane.loadPegs(pegLocs)
-    };
-    GameBoard.prototype.fireCannon = function () {
-        this.cannonBallPlane.fireCannonBall();
-    };
-    GameBoard.prototype.roundOver = function () {
+    ClientGameBoard.prototype.roundOver = function () {
 
         this.pegPhysicsManager.roundOver(false);
         this.backgroundPlane.roundOver(false);
@@ -102,7 +75,7 @@ define([
         }).bind(this), 2500);
     };
 
-    GameBoard.prototype.render = function () {
+    ClientGameBoard.prototype.render = function () {
         this.pegPhysicsManager.render();
         this.backgroundPlane.render();
         this.cannonPlane.render();
@@ -112,17 +85,12 @@ define([
         this.cannonBallPlane.render();
     };
 
-    GameBoard.prototype.tick = function () {
-        this.pegPhysicsManager.tick();
+    ClientGameBoard.prototype.tick = function () {
+        this.$super();
         this.backgroundPlane.tick();
-        this.cannonPlane.tick();
-        this.chutesPlane.tick();
-        this.pegsPlane.tick();
         this.overlaysPlane.tick();
-        this.cannonBallPlane.tick();
-
     };
 
-    return GameBoard;
+    return ClientGameBoard.extend(GameBoard);
 });
 

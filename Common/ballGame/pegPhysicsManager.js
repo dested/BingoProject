@@ -1,4 +1,4 @@
-define([        'canvasUtils'], function (canvasUtils) {
+define([], function () {
     var b2Vec2 = Box2D.Common.Math.b2Vec2,
         b2BodyDef = Box2D.Dynamics.b2BodyDef,
         b2Body = Box2D.Dynamics.b2Body,
@@ -11,24 +11,11 @@ define([        'canvasUtils'], function (canvasUtils) {
         b2DebugDraw = Box2D.Dynamics.b2DebugDraw,
         b2ContactListener = Box2D.Dynamics.b2ContactListener;
 
-    function PegPhysicsManager(gameModel, shouldDraw) {
+    function PegPhysicsManager(gameModel) {
         this.world = undefined;
         this.gameModel = gameModel;
-        this.shouldDraw = shouldDraw;
     }
 
-    PegPhysicsManager.prototype.initClient = function () {
-        this.plane = canvasUtils.createCanvas(this.gameModel.boardWidth, this.gameModel.boardHeight);
-        if (this.shouldDraw) {
-            var debugDraw = new b2DebugDraw();
-            debugDraw.SetSprite(this.plane.context);
-            debugDraw.SetDrawScale(this.getMeterPixelSize());
-            debugDraw.SetFillAlpha(0.4);
-            debugDraw.SetLineThickness(4.0);
-            debugDraw.SetFlags(b2DebugDraw.e_shapeBit | b2DebugDraw.e_jointBit);
-            this.world.SetDebugDraw(debugDraw);
-        }
-    }
 
     PegPhysicsManager.prototype.init = function () {
         this.world = new b2World(new b2Vec2(0, 35), true);
@@ -43,16 +30,15 @@ define([        'canvasUtils'], function (canvasUtils) {
         var myListener = new b2ContactListener;
 
         myListener.BeginContact = (function (fixture) {
-            console.log('collide: ', fixture.GetFixtureA().GetBody().GetUserData(), 'and', fixture.GetFixtureB().GetBody().GetUserData())
             if (fixture.GetFixtureA().GetBody().GetUserData()) {
                 if (fixture.GetFixtureA().GetBody().GetUserData().collide) {
-                    this.collisions.push({bodyA: fixture.GetFixtureA().GetBody(), bodyB: fixture.GetFixtureB().GetBody()});
+                    this.collisions.push({objA: fixture.GetFixtureA().GetBody().GetUserData(), objB: fixture.GetFixtureB().GetBody().GetUserData()});
                 }
             }
 
             if (fixture.GetFixtureB().GetBody().GetUserData()) {
                 if (fixture.GetFixtureB().GetBody().GetUserData().collide) {
-                    this.collisions.push({bodyA: fixture.GetFixtureB().GetBody(), bodyB: fixture.GetFixtureA().GetBody()});
+                    this.collisions.push({objA: fixture.GetFixtureB().GetBody().GetUserData(), objB: fixture.GetFixtureA().GetBody().GetUserData()});
                 }
             }
 
@@ -71,21 +57,12 @@ define([        'canvasUtils'], function (canvasUtils) {
 
         for (var i = 0; i < this.collisions.length; i++) {
             var collision = this.collisions[i];
-            collision.bodyA.GetUserData().collide(collision.bodyB.GetUserData());
-
+            collision.objA.collide(collision.objB);
         }
     };
 
     PegPhysicsManager.prototype.roundOver = function () {
     };
-
-    PegPhysicsManager.prototype.render = function () {
-        if (this.shouldDraw) {
-            this.world.DrawDebugData();
-        }
-
-    };
-
 
     PegPhysicsManager.prototype.createRectangleWall = function (x, y, width, height, userData) {
         var fixDef = new b2FixtureDef;
@@ -210,5 +187,5 @@ define([        'canvasUtils'], function (canvasUtils) {
     PegPhysicsManager.prototype.getBoardHeightInMeters = function () {
         return this.gameModel.boardHeight / this.getMeterPixelSize();
     };
-    return PegPhysicsManager;
+    return PegPhysicsManager.extend(Object);
 });

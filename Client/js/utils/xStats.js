@@ -1,4 +1,4 @@
-define(['../../libs/stats.min.js'], function () {
+define(['../../libs/stats.min'], function () {
     var stats = new Stats();
     stats.setMode(0); // 0: fps, 1: ms
 

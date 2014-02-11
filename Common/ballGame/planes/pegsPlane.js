@@ -1,20 +1,15 @@
 define(
     [
-        'canvasUtils',
         '../pieces/peg'
     ],
-    function (canvasUtils, Peg) {
+    function (Peg) {
         function PegsPlane(gameBoard, gameModel) {
-            this.plane = undefined; //canvas plane
             this.gameModel = gameModel;
             this.gameBoard = gameBoard;
+            this.pegInstance = Peg;
         }
 
         PegsPlane.prototype.init = function () {
-
-        };
-        PegsPlane.prototype.initClient = function () {
-            this.plane = canvasUtils.createCanvas(this.gameModel.boardWidth, this.gameModel.boardHeight);
 
         };
 
@@ -32,31 +27,13 @@ define(
             for (var i = 0; i < pegLocations.length; i++) {
                 var loc = pegLocations[i];
                 var peg;
-                this.gameModel.pegs.push(peg = new Peg(this.gameBoard, this.gameModel, loc.x, loc.y));
+                this.gameModel.pegs.push(peg = new this.pegInstance(this.gameBoard, this.gameModel, loc.x, loc.y));
                 peg.init();
-                peg.initClient();
             }
         };
         PegsPlane.prototype.tick = function () {
 
         };
-
-        PegsPlane.prototype.render = function () {
-            this.plane.clear();
-            var context = this.plane.context;
-
-            for (var i = 0; i < this.gameModel.pegs.length; i++) {
-                var peg = this.gameModel.pegs[i];
-                peg.render(context);
-            }
-
-
-            for (var i = 0; i < this.gameModel.pegs.length; i++) {
-                var peg = this.gameModel.pegs[i];
-                peg.renderText(context);
-            }
-        };
-
-        return PegsPlane;
+        return PegsPlane.extend(Object);
     }
-)
+);

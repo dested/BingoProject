@@ -1,29 +1,19 @@
 define(
     [
-        'assetLoader'
     ],
-    function (assetLoader) {
+    function ( ) {
         function GameModel(boardWidth, boardHeight) {
             this.boardWidth = boardWidth;
             this.boardHeight = boardHeight;
-            this.elementId = 'ballGameBoard';
-
-            this.background = assetLoader.getAsset('board');
             this.pegs = [];
-
-
             this.cannonLocation = {x: this.boardWidth / 2, y: 0};
             this.cannonAngle = 0;
-
             this.jackpotScore = 0;
             this.numberOfCoins = 2567;
             this.numberOfPulls = 15;
-
             this.interRoundBonus = 0;
-
-            this.clickManager = undefined;
         }
 
-        return GameModel;
+        return GameModel.extend(Object);
     }
-)
+);

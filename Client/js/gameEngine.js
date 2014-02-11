@@ -1,10 +1,11 @@
 define([
+    './config',
     'assetLoader',
-    './ballGame/gameBoard',
+    './ballGame/clientGameBoard',
     './utils/xStats',
     './utils/shims',
-    './utils/extender'
-], function (assetLoader, GameBoard, stats) {
+    '../../Common/utils/extender'
+], function (_config,assetLoader, GameBoard, stats) {
 
 
     function startGame() {

@@ -19,15 +19,11 @@ define(
         }
 
         OverlaysPlane.prototype.init = function () {
-
-        };
-        OverlaysPlane.prototype.initClient = function () {
             this.plane = canvasUtils.createCanvas(this.gameModel.boardWidth, this.gameModel.boardHeight);
 
             this.jackpotOverlay = assetLoader.getAsset('jackpotOverlay');
             this.coinBoxOverlay = assetLoader.getAsset('coinBoxOverlay');
             this.pullBoxOverlay = assetLoader.getAsset('pullBoxOverlay');
-
 
         };
 

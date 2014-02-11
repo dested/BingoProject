@@ -1,9 +1,10 @@
 define(
     [
-        'assetLoader'
+        'assetLoader',
+        'common.ballGame/pieces/chute'
     ],
-    function (assetLoader) {
-        function Chute(gameModel, chutePlane, chuteIndex, chuteLocation) {
+    function (assetLoader, Chute) {
+        function ClientChute(gameModel, chutePlane, chuteIndex, chuteLocation) {
             this.gameModel = gameModel;
             this.chuteAssets = [];
             this.chuteAssetsLit = [];
@@ -17,11 +18,9 @@ define(
         }
 
 
-        Chute.prototype.init = function () {
+        ClientChute.prototype.init = function () {
+            this.$super();
 
-        };
-
-        Chute.prototype.initClient = function () {
             this.chuteAssets.push(assetLoader.getAsset('chuteBlueBucket'));
             this.chuteAssets.push(assetLoader.getAsset('chuteGreenBucket'));
             this.chuteAssets.push(assetLoader.getAsset('chuteYellowBucket'));
@@ -33,21 +32,9 @@ define(
             this.chuteAssetsLit.push(assetLoader.getAsset('chuteYellowBucketLit'));
             this.chuteAssetsLit.push(assetLoader.getAsset('chuteRedBucketLit'));
             this.chuteAssetsLit.push(assetLoader.getAsset('chutePurpleBucketLit'));
-
-
         };
-        Chute.prototype.roundOver = function (finished) {
-            if (finished) {
-                this.triggered = false;
-                this.blinking = false;
-                this.chuteNumber = parseInt(Math.random() * 30);
-            } else {
-                if (this.triggered) {
-                    this.blinking = true;
-                }
-            }
-        };
-        Chute.prototype.render = function (context) {
+
+        ClientChute.prototype.render = function (context) {
             this.ticking++;
             var chuteLocation = this.chuteLocation;
 
@@ -106,10 +93,5 @@ define(
 
         };
 
-        Chute.prototype.tick = function () {
-
-        };
-
-
-        return Chute;
+        return ClientChute.extend(Chute);
     });

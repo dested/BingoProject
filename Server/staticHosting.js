@@ -12,7 +12,7 @@ var app = express();
 app.set('port',  3000);
 app.use(express.favicon());
 app.use(express.logger('dev'));
-app.use(express.static(path.join(__dirname, '../Client')));
+app.use(express.static(path.join(__dirname, '..')));
 
 app.use(express.errorHandler());
 

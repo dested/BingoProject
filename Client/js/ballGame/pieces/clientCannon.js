@@ -1,10 +1,11 @@
 define(
     [
         'assetLoader',
-        'clickRect'
+        'clickRect',
+        'common.ballGame/pieces/cannon'
     ],
-    function (assetLoader, ClickRect) {
-        function Cannon(gameModel, canonPlane) {
+    function (assetLoader, ClickRect, Cannon) {
+        function ClientCannon(gameModel, canonPlane) {
             this.gameModel = gameModel;
             this.cannonAsset = undefined;
             this.canonPlane = canonPlane;
@@ -12,19 +13,17 @@ define(
         }
 
 
-        Cannon.prototype.init = function () {
-
-        };
-        Cannon.prototype.initClient = function () {
+        ClientCannon.prototype.init = function () {
+            this.$super();
             this.cannonAsset = assetLoader.getAsset('cannon');
 
             var cannonButton = this.gameModel.cannonLocation;
 
             this.gameModel.clickManager.pushClickRect(
                 new ClickRect(
-                    cannonButton.x - this.cannonAsset.image.width*2 ,
-                    cannonButton.y ,
-                    this.cannonAsset.image.width*4,
+                    cannonButton.x - this.cannonAsset.image.width * 2,
+                    cannonButton.y,
+                    this.cannonAsset.image.width * 4,
                     this.cannonAsset.image.height,
                     this,
                     this.shootBall
@@ -45,30 +44,25 @@ define(
 
         };
 
-        Cannon.prototype.render = function (context) {
+        ClientCannon.prototype.render = function (context) {
             var cannonLocation = this.gameModel.cannonLocation;
 
             var cannonImage = this.cannonAsset.image;
 
 
-
             context.save();
-            context.translate(cannonLocation.x-cannonImage.width/2, cannonLocation.y);
-            context.translate(cannonImage.width/2, -cannonImage.height);
+            context.translate(cannonLocation.x - cannonImage.width / 2, cannonLocation.y);
+            context.translate(cannonImage.width / 2, -cannonImage.height);
 
             context.rotate(this.gameModel.cannonAngle * Math.PI / 180);
-            context.drawImage(cannonImage, -cannonImage.width /2,cannonImage.height );
+            context.drawImage(cannonImage, -cannonImage.width / 2, cannonImage.height);
             context.restore();
 
 
-
         };
 
-        Cannon.prototype.tick = function () {
 
-        };
-
-        Cannon.prototype.rotateClick = function (eventType, clickBox, x, y) {
+        ClientCannon.prototype.rotateClick = function (eventType, clickBox, x, y) {
 
 
             switch (eventType) {
@@ -91,7 +85,8 @@ define(
             if (this.gameModel.cannonAngle > 30)this.gameModel.cannonAngle = 30;
         };
 
-        Cannon.prototype.shootBall = function (eventType, clickBox, x, y, collide) {
+
+        ClientCannon.prototype.shootBall = function (eventType, clickBox, x, y, collide) {
             switch (eventType) {
                 case 'mouseUp':
                     if (collide) {
@@ -106,6 +101,6 @@ define(
                     break;
             }
         };
-
-        return Cannon;
-    });
+        return ClientCannon.extend(Cannon);
+    }
+);
