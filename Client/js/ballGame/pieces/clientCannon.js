@@ -75,16 +75,14 @@ define(
                     if (this.movingCannon) {
 
                         var angle = (Math.atan2(y - this.gameModel.cannonLocation.y, x - this.gameModel.cannonLocation.x) * 180 / Math.PI) - 90;
-
-                        this.gameModel.cannonAngle = angle;
+                        this.rotateCannon(angle);
                     }
                     break;
             }
 
-            if (this.gameModel.cannonAngle < -30)this.gameModel.cannonAngle = -30;
-            if (this.gameModel.cannonAngle > 30)this.gameModel.cannonAngle = 30;
         };
 
+  
 
         ClientCannon.prototype.shootBall = function (eventType, clickBox, x, y, collide) {
             switch (eventType) {

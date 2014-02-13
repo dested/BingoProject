@@ -17,7 +17,6 @@ define(
             this.$super();
 
             this.plane = canvasUtils.createCanvas(this.gameModel.boardWidth, this.gameModel.boardHeight);
-            this.cannon.init();
         };
 
         ClientCannonPlane.prototype.render = function () {

@@ -11,8 +11,65 @@
 </head>
 <body>
 <div style="" id="ballGameBoard"></div>
-<div ng-controller="BingoGameCtrl" style="position:absolute; right:0; top:0; width:300px; height:200px; border:solid 2px black; background-color:blue;">
-    hi{{shoes}}hi
+<div ng-controller="BingoGameCtrl"
+     style="position:absolute; right:0; top:50px; width:300px; height:200px; border:solid 2px black; background-color:deepskyblue;">
+    <label>Name: </label><input type="text" ng-model="model.userName"/>
+    <button ng-click="model.setName()">Join!</button>
+    <br/>
+    <fieldset>
+        <legend>Users</legend>
+        <ul>
+            <li ng-repeat="user in model.users">
+                {{user.name}}
+            </li>
+        </ul>
+    </fieldset>
+    <div ng-if="!!model.currentGame">
+        {{model.currentGame.name}} - {{model.currentGame.state}}<br />
+        <label>Leader:</label>{{model.currentGame.leader.name}}<br/>
+        <label>Users:</label>
+        <ul>
+            <li ng-repeat="user in model.currentGame.users">
+                <span ng-show="model.currentGame.throwingUser.guid==user.guid">Turn -&gt; </span>
+                {{user.name}}
+            </li>
+        </ul>
+
+        <button ng-show="model.currentGame.state!='started' && model.me.guid==model.currentGame.leader.guid"
+                ng-click="model.startGame(currentGame)">Start Game!
+        </button>
+
+
+        <button ng-show="model.currentGame.state=='started' && model.currentGame.throwingUser.guid==model.me.guid"
+                ng-click="model.throwBall()">Throw Ball!
+        </button>
+
+
+
+    </div>
+    <fieldset ng-if="!model.currentGame">
+
+        <fieldset>
+            <legend>Create Game</legend>
+
+            <label>Game Name: </label><input type="text" ng-model="model.gameName"/>
+            <button ng-click="model.createGame()">Create!</button>
+        </fieldset>
+
+        <legend>Games</legend>
+        <ul>
+            <li ng-repeat="game in model.games">
+                {{game.name}}
+                <button ng-click="model.joinGame(game)">Join!</button>
+                <label>Users:</label>
+                <ul>
+                    <li ng-repeat="user in game.users">
+                        {{user.name}}
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </fieldset>
 </div>
 <script type="text/javascript" src="libs/jquery/jquery-1.10.2.js"></script>
 

@@ -15,6 +15,7 @@ define([
         var boardHeight = 557;//todo: to object
 
         var gameBoard = new GameBoard(boardWidth, boardHeight);
+        window.gameBoard=gameBoard;
         gameBoard.init();
 
         setInterval(function () {
@@ -36,7 +37,8 @@ define([
     assetLoader.pushAsset('pegHit', 'images/pegs/blue_peg_lit_overlay.png');
 
     assetLoader.pushAsset('cannon', 'images/cannons/shooter.png');
-    assetLoader.pushAsset('cannonBall', 'images/cannonBalls/ball_noshine.png');
+    assetLoader.pushAsset('cannonBall', 'images/cannonBalls/ball_inner.png');
+    assetLoader.pushAsset('cannonBallShine', 'images/cannonBalls/ball_outer.png');
 
     assetLoader.pushAsset('chuteBuckets', 'images/chutes/buckets.png');
     assetLoader.pushAsset('chuteBumpers', 'images/chutes/bumpers.png');

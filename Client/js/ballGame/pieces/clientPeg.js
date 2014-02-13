@@ -17,6 +17,9 @@ define(
             this.tocking = 0;
             this.blinking = false;
         }
+        ClientPeg.prototype.init = function () {
+            this.$super();
+        };
 
         ClientPeg.prototype.render = function (context) {
             this.tocking++;

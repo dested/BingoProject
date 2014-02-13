@@ -5,7 +5,7 @@ define(
         './clientChute',
         'common.ballGame/pieces/cannonBall'
     ],
-    function (assetLoader, Peg, Chute,CannonBall) {
+    function (assetLoader, Peg, Chute, CannonBall) {
         function ClientCannonBall(gameBoard, gameModel, x, y, angle) {
             this.gameBoard = gameBoard;
             this.gameModel = gameModel;
@@ -17,28 +17,32 @@ define(
             this.ballDead = false;
         }
 
-        ClientCannonBall.prototype.init = function () {
-            this.body = this.gameBoard.pegPhysicsManager.createCannonBall(this.x, this.y, this.angle, this.velocity, this);
-        };
-
         ClientCannonBall.prototype.render = function (context) {
             if (this.ballDead)return;
             var position = this.body.GetPosition();
 
             var x = this.gameBoard.pegPhysicsManager.meterToPixel(position.x);
             var y = this.gameBoard.pegPhysicsManager.meterToPixel(position.y);
+            var cannonBall = assetLoader.getAsset('cannonBall').image;
+            var cannonBallShine = assetLoader.getAsset('cannonBallShine').image;
 
 
             context.save();
             context.translate(x, y);
-            var image = assetLoader.getAsset('cannonBall').image;
-            context.translate(-image.width / 2, -image.height / 2);
 
-            context.translate(image.width / 2, image.height / 2);
+            context.translate(-cannonBall.width / 2, -cannonBall.height / 2);
+
+            context.save();
+
+            context.translate(cannonBall.width / 2, cannonBall.height / 2);
             context.rotate(this.body.GetAngle());
 
-            context.drawImage(image, -image.width / 2, -image.height / 2);
+            context.drawImage(cannonBall, -cannonBall.width / 2, -cannonBall.height / 2);
             context.restore();
+
+            context.drawImage(cannonBallShine, 0, 0);
+            context.restore();
+
         };
 
         return ClientCannonBall.extend(CannonBall);

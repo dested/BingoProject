@@ -14,6 +14,7 @@ define(
         }
 
         ClientCannonBallPlane.prototype.init = function () {
+            this.$super();
             this.plane = canvasUtils.createCanvas(this.gameModel.boardWidth, this.gameModel.boardHeight);
         };
 
@@ -40,4 +41,4 @@ define(
 
         return ClientCannonBallPlane.extend(CannonBallPlane);
     }
-)
+);
