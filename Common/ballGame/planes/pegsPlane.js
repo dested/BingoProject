@@ -1,5 +1,5 @@
 define('common.ballGame.planes.pegsPlane',
-  [
+    [
         'common.ballGame.pieces.peg'
     ],
     function (Peg) {
@@ -26,7 +26,7 @@ define('common.ballGame.planes.pegsPlane',
             for (var i = 0; i < pegLocations.length; i++) {
                 var loc = pegLocations[i];
                 var peg;
-                this.gameBoard.gameModel.pegs.push(peg = new this.pegInstance(this.gameBoard, loc.x, loc.y,loc.type));
+                this.gameBoard.gameModel.pegs.push(peg = new this.pegInstance(this.gameBoard, loc.x, loc.y, loc.type));
                 peg.init();
             }
         };

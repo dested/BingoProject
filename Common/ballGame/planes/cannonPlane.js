@@ -1,8 +1,8 @@
 define('common.ballGame.planes.cannonPlane',
-  [
+    [
         'common.ballGame.pieces.cannon'
     ],
-    function ( Cannon) {
+    function (Cannon) {
         function CannonPlane(gameBoard) {
             this.plane = undefined; //canvas plane
             this.gameBoard = gameBoard;

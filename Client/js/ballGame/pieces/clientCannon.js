@@ -15,39 +15,39 @@ define('client.ballGame.pieces.cannon',
         }
 
 
-      ClientCannon.prototype.init = function () {
-        this.$super();
-        this.cannonAsset = assetLoader.getAsset('cannon');
+        ClientCannon.prototype.init = function () {
+            this.$super();
+            this.cannonAsset = assetLoader.getAsset('cannon');
 
-        var cannonButton = this.gameBoard.gameModel.cannonLocation;
+            var cannonButton = this.gameBoard.gameModel.cannonLocation;
 
-        this.gameBoard.gameModel.clickManager.pushClickRect(
-          new ClickRect(
-              cannonButton.x - this.cannonAsset.image.width * 2,
-            cannonButton.y,
-              this.cannonAsset.image.width * 4,
-            this.cannonAsset.image.height,
-            this,
-            this.shootBall
-          )
-        );
+            this.gameBoard.gameModel.clickManager.pushClickRect(
+                new ClickRect(
+                        cannonButton.x - this.cannonAsset.image.width * 2,
+                    cannonButton.y,
+                        this.cannonAsset.image.width * 4,
+                    this.cannonAsset.image.height,
+                    this,
+                    this.shootBall
+                )
+            );
 
-        this.gameBoard.gameModel.clickManager.pushClickRect(
-          new ClickRect(
-            0,
-            0,
-            this.gameBoard.gameModel.boardWidth,
-            this.gameBoard.gameModel.boardHeight,
-            this,
-            this.rotateClick
-          )
-        );
-
-
-      };
+            this.gameBoard.gameModel.clickManager.pushClickRect(
+                new ClickRect(
+                    0,
+                    0,
+                    this.gameBoard.gameModel.boardWidth,
+                    this.gameBoard.gameModel.boardHeight,
+                    this,
+                    this.rotateClick
+                )
+            );
 
 
-      ClientCannon.prototype.render = function (context) {
+        };
+
+
+        ClientCannon.prototype.render = function (context) {
             var cannonLocation = this.gameBoard.gameModel.cannonLocation;
 
             var cannonImage = this.cannonAsset.image;
@@ -62,56 +62,50 @@ define('client.ballGame.pieces.cannon',
             context.restore();
 
 
-           if(this.gameBoard.gameModel.showPeople){
-               this.ticking += 2;
+            if (this.gameBoard.gameModel.showPeople) {
+                this.ticking += 2;
 
-               context.save();
+                context.save();
 
-               var person = assetLoader.getAsset('female.blonde.front');
+                var person = assetLoader.getAsset('female.blonde.front');
 
-               context.translate((-this.ticking+(this.gameBoard.gameModel.canvasWidth*100))%this.gameBoard.gameModel.canvasWidth, 100);
+                context.translate((-this.ticking + (this.gameBoard.gameModel.canvasWidth * 100)) % this.gameBoard.gameModel.canvasWidth, 100);
 
-               context.translate(person.width / 2, person.height / 2);
-
-
-
-               if (this.ticking % 20 < 10) {
-                   context.rotate(.07);
-                   context.drawImage(person.image, -person.width / 2, -person.height / 2)
-               } else {
-                   context.rotate(-.07);
-                   context.drawImage(person.image, -person.width / 2, -person.height / 2)
-               }
-
-               context.restore();
+                context.translate(person.width / 2, person.height / 2);
 
 
+                if (this.ticking % 20 < 10) {
+                    context.rotate(.07);
+                    context.drawImage(person.image, -person.width / 2, -person.height / 2)
+                } else {
+                    context.rotate(-.07);
+                    context.drawImage(person.image, -person.width / 2, -person.height / 2)
+                }
+
+                context.restore();
 
 
+                context.save();
+
+                var person = assetLoader.getAsset('male.hat.front');
+
+                context.translate((this.ticking + (this.gameBoard.gameModel.canvasWidth * 100)) % this.gameBoard.gameModel.canvasWidth, 200);
+
+                context.translate(person.width / 2, person.height / 2);
 
 
-               context.save();
+                if (this.ticking % 20 < 10) {
+                    context.rotate(.07);
+                    context.scale(-1, 1);
+                    context.drawImage(person.image, -person.width / 2, -person.height / 2)
+                } else {
+                    context.rotate(-.07);
+                    context.scale(-1, 1);
+                    context.drawImage(person.image, -person.width / 2, -person.height / 2)
+                }
 
-               var person = assetLoader.getAsset('male.hat.front');
-
-               context.translate((this.ticking+(this.gameBoard.gameModel.canvasWidth*100))%this.gameBoard.gameModel.canvasWidth, 200);
-
-               context.translate(person.width / 2, person.height / 2);
-
-
-
-               if (this.ticking % 20 < 10) {
-                   context.rotate(.07);
-                   context.scale(-1,1);
-                   context.drawImage(person.image, -person.width / 2, -person.height / 2)
-               } else {
-                   context.rotate(-.07);
-                   context.scale(-1,1);
-                   context.drawImage(person.image, -person.width / 2, -person.height / 2)
-               }
-
-               context.restore();
-           }
+                context.restore();
+            }
 
         };
 

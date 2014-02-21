@@ -17,11 +17,11 @@ define('client.ballGame.pieces.cannonBall',
         }
 
 
-      ClientCannonBall.prototype.tick = function () {
-        this.$super();
-        var position = this.body.GetPosition();
-        this.gameBoard.viewManager.center(this.gameBoard.pegPhysicsManager.meterToPixel(position.x),this.gameBoard.pegPhysicsManager.meterToPixel(position.y));
-      };
+        ClientCannonBall.prototype.tick = function () {
+            this.$super();
+            var position = this.body.GetPosition();
+            this.gameBoard.viewManager.center(this.gameBoard.pegPhysicsManager.meterToPixel(position.x), this.gameBoard.pegPhysicsManager.meterToPixel(position.y));
+        };
 
         ClientCannonBall.prototype.render = function (context) {
             if (this.ballDead)return;

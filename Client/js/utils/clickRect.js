@@ -4,13 +4,13 @@ define(
 
     ],
     function () {
-        function ClickRect(x, y, width, height, instance,eventToTrigger) {
+        function ClickRect(x, y, width, height, instance, eventToTrigger) {
             this.x = x;
             this.y = y;
             this.width = width;
             this.height = height;
             this.instance = instance;
-            this.eventToTrigger=eventToTrigger;
+            this.eventToTrigger = eventToTrigger;
         }
 
         ClickRect.prototype.collides = function (x, y) {

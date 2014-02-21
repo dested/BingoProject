@@ -1,40 +1,10 @@
-require('../Common/ballGame/libs/Box2dWeb-2.1.a.3.min.js');
-
-define(['../Common/ballGame/gameBoard'], function (GameBoard) {
-    /*
+require('./libs/Box2dWeb-2.1.a.3.min');
 
 
-     users
-     emit
-
-     on
-     -  users.update
+var define = require('./libs/define');
 
 
-     games
-     emit
-     -  games.get
-     -  games.create
-     -  games.join
-     on
-     -  games.update
-
-
-     user
-     emit
-     -  user.setName
-     on
-     -  user.joined
-
-     game
-     emit
-     -  game.start
-     -  game.throwBall
-     -  game.leave
-     on
-     -  game.thrownBall
-
-     */
+define('server.game', ['common.extender', 'common.ballGame.gameBoard'], function (_extender, GameBoard) {
 
 
     var id = 0;
@@ -47,7 +17,7 @@ define(['../Common/ballGame/gameBoard'], function (GameBoard) {
         this.ballGameBoard = undefined;
         this.userRoundRobin = 0;
         this.throwingUser = undefined;
-        this.state='lobby';
+        this.state = 'lobby';
     }
 
     Game.prototype.addUser = function (user) {
@@ -82,7 +52,7 @@ define(['../Common/ballGame/gameBoard'], function (GameBoard) {
     };
 
     Game.prototype.containsUser = function (user) {
-        return this.users.indexOf(user)>-1;
+        return this.users.indexOf(user) > -1;
     };
 
     Game.prototype.nextTurn = function () {
@@ -95,13 +65,13 @@ define(['../Common/ballGame/gameBoard'], function (GameBoard) {
         var boardHeight = 557;
 
 
-        this.ballGameBoard = new GameBoard(boardWidth, boardHeight*2);
+        this.ballGameBoard = new GameBoard(boardWidth, boardHeight * 2);
         this.ballGameBoard.init();
 
 
         this.nextTurn();
 
-        this.state='started';
+        this.state = 'started';
 
     };
     Game.prototype.throwBall = function (user, cannon, onDone) {
@@ -127,7 +97,7 @@ define(['../Common/ballGame/gameBoard'], function (GameBoard) {
     };
     Game.prototype.end = function () {
         if (this.isActive()) {
-            this.state='over';
+            this.state = 'over';
 
         }
     };
@@ -266,7 +236,7 @@ define(['../Common/ballGame/gameBoard'], function (GameBoard) {
                 })[0];
 
                 if (game) {
-                     game.throwBall(user,payload.cannon,function(done){
+                    game.throwBall(user, payload.cannon, function (done) {
                         if (done) {
                             game.emit('game.thrownBall', {
                                 cannon: payload.cannon,

@@ -14,7 +14,7 @@ define(
             this.clickRects.push(clickRect);
         };
 
-        ClickManager.prototype.init= function () {
+        ClickManager.prototype.init = function () {
             this.element = document.createElement('div');
             this.element.className = 'clickManager';
             this.element.style.width = this.gameBoard.gameModel.canvasWidth + 'px';
@@ -50,7 +50,7 @@ define(
                 if (evt.touches.length > 0) {
                     x = evt.touches[0].pageX - evt.touches[0].target.offsetLeft;
                     y = evt.touches[0].pageY - evt.touches[0].target.offsetTop;
-                }else{
+                } else {
                     x = evt.changedTouches[0].pageX - evt.changedTouches[0].target.offsetLeft;
                     y = evt.changedTouches[0].pageY - evt.changedTouches[0].target.offsetTop;
                 }

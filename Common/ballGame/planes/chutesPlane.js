@@ -1,5 +1,5 @@
 define('common.ballGame.planes.chutesPlane',
-  [
+    [
         'common.ballGame.pieces.chute'
     ],
     function (Chute) {
@@ -14,7 +14,7 @@ define('common.ballGame.planes.chutesPlane',
 
 
             this.chutes = [];
-            this.chuteInstance=Chute;
+            this.chuteInstance = Chute;
 
         }
 
