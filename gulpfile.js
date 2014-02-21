@@ -17,8 +17,8 @@ var paths = {
 };
 
 var libPaths = {
-    clientScripts: ['Client/libs/**/*.js', 'Common/ballGame/libs/**/*.js'],
-    serverScripts: ['Common/ballGame/libs/**/*.js','Server/libs/**/*.js']
+    clientScripts: ['Client/libs/**/*.js', 'Common/ballGame/libs/**/*.js','Common/libs/**/*.js'],
+    serverScripts: ['Common/ballGame/libs/**/*.js','Server/libs/**/*.js','Common/libs/**/*.js']
 };
 var serverNodeModulePath = ['Server/node_modules/**/*.*'];
 
@@ -50,14 +50,16 @@ gulp.task('client.clean', function () {
 
 gulp.task('client.packageScripts', function () {
     return gulp.src(paths.clientScripts)
-//    .pipe(uglify())
+    .pipe(uglify())
         .pipe(concat('client.min.js'))
-        .pipe(insert.append('require(["client.gameEngine"]);'))
+        .pipe(insert.append('define("client.gameEngine");'))
         .pipe(gulp.dest('build/client/js'));
 });
 
 gulp.task('client.packageLibs', function () {
     return gulp.src(libPaths.clientScripts)
+        .pipe(uglify())
+        .pipe(concat('libs.min.js'))
         .pipe(gulp.dest('build/client/libs'));
 });
 

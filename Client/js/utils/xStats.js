@@ -1,5 +1,7 @@
-define('client.utils.stats',
-    ['./libs/stats.min.js'], function () {
+define(
+    'client.utils.stats',
+    [],
+    function () {
         var stats = new Stats();
         stats.setMode(0); // 0: fps, 1: ms
 

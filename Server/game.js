@@ -1,6 +1,5 @@
 require('./libs/Box2dWeb-2.1.a.3.min');
 
-
 var define = require('./libs/define');
 
 
