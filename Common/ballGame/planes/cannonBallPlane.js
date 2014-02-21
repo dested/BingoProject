@@ -1,12 +1,12 @@
 define(
+  'common.ballGame.planes.cannonBallPlane',
     [
-        '../pieces/cannonBall'
+        'common.ballGame.pieces.cannonBall'
     ],
     function ( CannonBall) {
-        function CannonBallPlane(gameBoard, gameModel) {
+        function CannonBallPlane(gameBoard) {
             this.plane = undefined; //canvas plane
             this.gameBoard = gameBoard;
-            this.gameModel = gameModel;
             this.cannonBall = undefined;
             this.cannonBallInstance=CannonBall;
         }
@@ -28,7 +28,7 @@ define(
 
         CannonBallPlane.prototype.fireCannonBall = function () {
             if (!this.cannonBall) {
-                this.cannonBall = new this.cannonBallInstance(this.gameBoard, this.gameModel, this.gameModel.cannonLocation.x, this.gameModel.cannonLocation.y, this.gameModel.cannonAngle + 90);
+                this.cannonBall = new this.cannonBallInstance(this.gameBoard, this.gameBoard.gameModel.cannonLocation.x, this.gameBoard.gameModel.cannonLocation.y, this.gameBoard.gameModel.cannonAngle + 90);
                 this.cannonBall.init();
             }
 

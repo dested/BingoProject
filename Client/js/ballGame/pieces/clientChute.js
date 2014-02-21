@@ -1,11 +1,11 @@
-define(
+define('client.ballGame.pieces.chute',
     [
-        'assetLoader',
-        'common.ballGame/pieces/chute'
+        'utils.assetLoader',
+        'common.ballGame.pieces.chute'
     ],
     function (assetLoader, Chute) {
-        function ClientChute(gameModel, chutePlane, chuteIndex, chuteLocation) {
-            this.gameModel = gameModel;
+        function ClientChute(gameBoard, chutePlane, chuteIndex, chuteLocation) {
+            this.gameBoard = gameBoard;
             this.chuteAssets = [];
             this.chuteAssetsLit = [];
             this.chuteIndex = chuteIndex;

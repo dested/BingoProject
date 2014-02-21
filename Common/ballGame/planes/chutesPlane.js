@@ -1,13 +1,12 @@
-define(
-    [
-        '../pieces/chute'
+define('common.ballGame.planes.chutesPlane',
+  [
+        'common.ballGame.pieces.chute'
     ],
     function (Chute) {
 
-        function ChutesPlane(gameBoard, gameModel) {
+        function ChutesPlane(gameBoard) {
             this.backPlane = undefined; //canvas plane
             this.frontPlane = undefined; //canvas plane
-            this.gameModel = gameModel;
             this.gameBoard = gameBoard;
 
             this.bumpersSize = undefined;
@@ -78,7 +77,7 @@ define(
 
             for (var i = 0; i < chuteLocations.length; i++) {
                 var chuteLocation = chuteLocations[i];
-                var chute = new this.chuteInstance(this.gameModel, this, i, chuteLocation);
+                var chute = new this.chuteInstance(this.gameBoard, this, i, chuteLocation);
                 chute.init();
                 this.gameBoard.pegPhysicsManager.createRectangleSensor(chuteLocation.x, chuteLocation.y, bucketWidth, bucketHeight, chute);
                 this.chutes.push(chute);

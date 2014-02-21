@@ -1,14 +1,13 @@
-define(
+define('client.ballGame.pieces.cannonBall',
     [
-        'assetLoader',
-        './clientPeg',
-        './clientChute',
-        'common.ballGame/pieces/cannonBall'
+        'utils.assetLoader',
+        'client.ballGame.pieces.peg',
+        'client.ballGame.pieces.chute',
+        'common.ballGame.pieces.cannonBall'
     ],
     function (assetLoader, Peg, Chute, CannonBall) {
-        function ClientCannonBall(gameBoard, gameModel, x, y, angle) {
+        function ClientCannonBall(gameBoard, x, y, angle) {
             this.gameBoard = gameBoard;
-            this.gameModel = gameModel;
             this.x = x;
             this.y = y;
             this.angle = angle;
@@ -16,6 +15,13 @@ define(
             this.body = undefined;
             this.ballDead = false;
         }
+
+
+      ClientCannonBall.prototype.tick = function () {
+        this.$super();
+        var position = this.body.GetPosition();
+        this.gameBoard.viewManager.center(this.gameBoard.pegPhysicsManager.meterToPixel(position.x),this.gameBoard.pegPhysicsManager.meterToPixel(position.y));
+      };
 
         ClientCannonBall.prototype.render = function (context) {
             if (this.ballDead)return;

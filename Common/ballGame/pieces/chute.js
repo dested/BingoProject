@@ -1,9 +1,10 @@
 define(
+  'common.ballGame.pieces.chute',
     [
     ],
     function ( ) {
-        function Chute(gameModel, chutePlane, chuteIndex, chuteLocation) {
-            this.gameModel = gameModel;
+        function Chute(gameBoard, chutePlane, chuteIndex, chuteLocation) {
+            this.gameBoard = gameBoard;
             this.chuteAssets = [];
             this.chuteAssetsLit = [];
             this.chuteIndex = chuteIndex;

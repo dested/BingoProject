@@ -1,11 +1,13 @@
 define(
-    'clickManager',
-    [],
+    'utils.clickManager',
+    [
+
+    ],
     function () {
-        function ClickManager(gameModel) {
+        function ClickManager(gameBoard) {
             this.clickRects = [];
             this.element = undefined;
-            this.gameModel = gameModel;
+            this.gameBoard = gameBoard;
         }
 
         ClickManager.prototype.pushClickRect = function (clickRect) {
@@ -15,8 +17,8 @@ define(
         ClickManager.prototype.init= function () {
             this.element = document.createElement('div');
             this.element.className = 'clickManager';
-            this.element.style.width = this.gameModel.boardWidth + 'px';
-            this.element.style.height = this.gameModel.boardHeight + 'px';
+            this.element.style.width = this.gameBoard.gameModel.canvasWidth + 'px';
+            this.element.style.height = this.gameBoard.gameModel.canvasHeight + 'px';
             this.element.onmousedown = (function (evt) {
                 this.processMouseEvent('mouseDown', evt)
             }).bind(this);

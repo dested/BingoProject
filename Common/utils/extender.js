@@ -1,66 +1,69 @@
-define([], function () {
+define(
+  'common.extender',
+  [],
+  function () {
     Function.prototype.extend = function (parent) {
-        var child = this;
-        var realChild = child;
+      var child = this;
+      var realChild = child;
 
-        if (parent != Object) {//extends nothing
+      if (parent != Object) {//extends nothing
 
-            realChild = (function (child, parent) {
-                return function () {
-                    this.$super = parent.prototype.constructor.bind(this);
-                    var ret = child.prototype.constructor.apply(this, arguments);
-                    this.$super = null;
-                    return ret;
-                };
-            })(child, parent);
+        realChild = (function (child,parent) {
+          return function () {
+            this.$super = parent.prototype.constructor.bind(this);
+            var ret = child.prototype.constructor.apply(this,arguments);
+            this.$super = null;
+            return ret;
+          };
+        })(child,parent);
 
-            realChild.prototype = child.prototype;
+        realChild.prototype = child.prototype;
 
-            child = realChild;
+        child = realChild;
 
 
-            for (var func in parent.prototype) {
-                if (!child.prototype[func]) {
-                    (function (func, child, parent) {
-                        child.prototype[func] = function () {
-                            var oldMeth = this.$super;
-                            this.$super = null;
-                            ret = parent.prototype[func].apply(this, arguments);
-                            this.$super = oldMeth;
-                            return ret;
-                        };
+        for (var func in parent.prototype) {
+          if (!child.prototype[func]) {
+            (function (func,child,parent) {
+              child.prototype[func] = function () {
+                var oldMeth = this.$super;
+                this.$super = null;
+                ret = parent.prototype[func].apply(this,arguments);
+                this.$super = oldMeth;
+                return ret;
+              };
 
-                    })(func, child, parent);
-                } else {
-                    (function (func, child, parent) {
-                        var origFunc = child.prototype[func];
-                        child.prototype[func] = function () {
-                            var oldMeth = this.$super;
-                            this.$super = parent.prototype[func].bind(this);
-                            var ret = origFunc.apply(this, arguments);
-                            this.$super = oldMeth;
-                            return ret;
-                        };
+            })(func,child,parent);
+          } else {
+            (function (func,child,parent) {
+              var origFunc = child.prototype[func];
+              child.prototype[func] = function () {
+                var oldMeth = this.$super;
+                this.$super = parent.prototype[func].bind(this);
+                var ret = origFunc.apply(this,arguments);
+                this.$super = oldMeth;
+                return ret;
+              };
 
-                    })(func, child, parent);
-                }
-            }
+            })(func,child,parent);
+          }
         }
+      }
 
-        realChild.prototype.base = parent;
-        if (!realChild.prototype.instanceOf) {
-            realChild.prototype.instanceOf = function (other) {
-                if (this instanceof other) {
-                    return true;
-                }
-                if (this.base === other) {
-                    return true;
-                }
-            };
-        }
+      realChild.prototype.base = parent;
+      if (!realChild.prototype.instanceOf) {
+        realChild.prototype.instanceOf = function (other) {
+          if (this instanceof other) {
+            return true;
+          }
+          if (this.base === other) {
+            return true;
+          }
+        };
+      }
 
 
-        return realChild;
+      return realChild;
     };
 
 
@@ -118,4 +121,4 @@ define([], function () {
      */
 
 
-});
+  });

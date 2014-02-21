@@ -1,6 +1,3 @@
-/*
-    Eventually the express server will go away in favor of a cdn
-*/
 
 var express = require('express');
 var http = require('http');

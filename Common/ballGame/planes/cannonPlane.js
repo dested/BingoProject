@@ -1,14 +1,13 @@
-define(
-    [
-        '../pieces/cannon'
+define('common.ballGame.planes.cannonPlane',
+  [
+        'common.ballGame.pieces.cannon'
     ],
     function ( Cannon) {
-        function CannonPlane(gameBoard, gameModel) {
+        function CannonPlane(gameBoard) {
             this.plane = undefined; //canvas plane
-            this.gameModel = gameModel;
             this.gameBoard = gameBoard;
 
-            this.cannon = new Cannon(this.gameModel, this);
+            this.cannon = new Cannon(this.gameBoard, this);
         }
 
         CannonPlane.prototype.init = function () {
@@ -17,7 +16,7 @@ define(
 
         CannonPlane.prototype.roundOver = function (finished) {
             if (finished) {
-                this.gameModel.cannonAngle = 0;
+                this.gameBoard.gameModel.cannonAngle = 0;
             }
         };
 

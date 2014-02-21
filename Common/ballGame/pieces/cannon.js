@@ -1,9 +1,9 @@
-define(
+define('common.ballGame.pieces.cannon',
     [
     ],
     function () {
-        function Cannon(gameModel, canonPlane) {
-            this.gameModel = gameModel;
+        function Cannon(gameBoard, canonPlane) {
+            this.gameBoard = gameBoard;
             this.cannonAsset = undefined;
             this.canonPlane = canonPlane;
             this.movingCannon = false;
@@ -18,9 +18,9 @@ define(
 
         };
         Cannon.prototype.rotateCannon = function (angle) {
-            this.gameModel.cannonAngle = angle;
-            if (this.gameModel.cannonAngle < -30)this.gameModel.cannonAngle = -30;
-            if (this.gameModel.cannonAngle > 30)this.gameModel.cannonAngle = 30;
+            this.gameBoard.gameModel.cannonAngle = angle;
+            if (this.gameBoard.gameModel.cannonAngle < -30)this.gameBoard.gameModel.cannonAngle = -30;
+            if (this.gameBoard.gameModel.cannonAngle > 30)this.gameBoard.gameModel.cannonAngle = 30;
         };
 
         return Cannon.extend(Object);

@@ -1,6 +1,8 @@
 define(
-    'clickRect',
-    [],
+    'utils.clickRect',
+    [
+
+    ],
     function () {
         function ClickRect(x, y, width, height, instance,eventToTrigger) {
             this.x = x;

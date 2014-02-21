@@ -5,11 +5,11 @@ if (typeof define !== 'function') {
 }
 
 
-require('../Common/utils/extender');
+//require('../Common/utils/extender');
 
 
 require('./staticHosting');
-require('./game');
+//require('./game');
 
 
 

@@ -82,7 +82,7 @@ define(['../Common/ballGame/gameBoard'], function (GameBoard) {
     };
 
     Game.prototype.containsUser = function (user) {
-        return this.users.indexOf(user);
+        return this.users.indexOf(user)>-1;
     };
 
     Game.prototype.nextTurn = function () {
@@ -95,7 +95,7 @@ define(['../Common/ballGame/gameBoard'], function (GameBoard) {
         var boardHeight = 557;
 
 
-        this.ballGameBoard = new GameBoard(boardWidth, boardHeight);
+        this.ballGameBoard = new GameBoard(boardWidth, boardHeight*2);
         this.ballGameBoard.init();
 
 
@@ -206,6 +206,12 @@ define(['../Common/ballGame/gameBoard'], function (GameBoard) {
             user.setName(payload.name);
             user.emit('user.joined', {user: user.getTransmission()});
             updateUsers();
+
+            user.emit('games.update',
+                {
+                    games: transmit(games)
+                }
+            );
         });
 
         socket.on('games.get', function () {

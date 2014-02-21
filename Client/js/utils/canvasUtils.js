@@ -1,6 +1,8 @@
 define(
-    'canvasUtils',
-    [],
+    'utils.canvasUtils',
+    [
+
+    ],
     function () {
         function _createCanvas(width, height) {
 

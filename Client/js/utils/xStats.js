@@ -1,4 +1,5 @@
-define(['../../libs/stats.min'], function () {
+define('client.utils.stats',
+  ['./libs/stats.min.js'], function () {
     var stats = new Stats();
     stats.setMode(0); // 0: fps, 1: ms
 
@@ -9,4 +10,4 @@ define(['../../libs/stats.min'], function () {
     document.body.appendChild(stats.domElement);
 
     return stats;
-})
+});

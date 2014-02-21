@@ -1,30 +1,37 @@
-define(['canvasUtils', 'assetLoader'], function (canvasUtils, assetLoader) {
-        function ClientBackgroundPlane(gameModel) {
-            this.plane = undefined; //canvas plane
-            this.gameModel = gameModel;
-        }
+define(
+  'client.ballGame.planes.backgroundPlane',
+  [
+    'utils.canvasUtils',
+    'utils.assetLoader'
+  ],
+  function (canvasUtils,assetLoader) {
 
-        ClientBackgroundPlane.prototype.init = function () {
-            this.plane = canvasUtils.createCanvas(this.gameModel.boardWidth, this.gameModel.boardHeight);
-        };
-        ClientBackgroundPlane.prototype.tick = function () {
-        };
-        ClientBackgroundPlane.prototype.roundOver = function () {
-        };
-
-        ClientBackgroundPlane.prototype.render = function () {
-
-
-            var context = this.plane.context;
-
-            context.save();
-
-            context.drawImage(assetLoader.getAsset('board').image, 0, 0);
-
-            context.restore();
-
-        };
-
-        return ClientBackgroundPlane;
+    function ClientBackgroundPlane(gameBoard) {
+      this.plane = undefined; //canvas plane
+      this.gameBoard = gameBoard;
     }
-)
+
+    ClientBackgroundPlane.prototype.init = function () {
+      this.plane = canvasUtils.createCanvas(this.gameBoard.gameModel.canvasWidth,this.gameBoard.gameModel.canvasHeight);
+    };
+    ClientBackgroundPlane.prototype.tick = function () {
+    };
+    ClientBackgroundPlane.prototype.roundOver = function () {
+    };
+
+    ClientBackgroundPlane.prototype.render = function () {
+
+
+      var context = this.plane.context;
+
+      context.save();
+      this.gameBoard.viewManager.translateContext(context);
+      context.drawImage(assetLoader.getAsset('board').image,0,0,this.gameBoard.gameModel.boardWidth,this.gameBoard.gameModel.boardHeight);
+
+      context.restore();
+
+    };
+
+    return ClientBackgroundPlane;
+  }
+);

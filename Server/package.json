@@ -1,11 +1,17 @@
 {
-  "name": "BingoProject",
+  "name": "Bingo-Server",
   "version": "0.0.1",
-  "private": true,
-  "scripts": {
-    "start": "node app.js"
-  },
+  "description": "",
+  "main": "app.js",
   "dependencies": {
-    "express": "3.4.8"
-  }
+    "express": "~3.4.8",
+    "socket.io": "~0.9.16",
+    "requirejs": "~2.1.10"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Dested",
+  "license": "ISC"
 }
