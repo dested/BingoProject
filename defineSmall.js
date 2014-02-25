@@ -102,21 +102,25 @@ fs.readFile("C:\\junk\\BingoProject\\build\\client\\js\\client.min.js",{encoding
         }
       }
     }
-  });
+  });var assetNames=[];
 
   var replaceImages = new UglifyJS.TreeTransformer(null,function (node) {
 
-    if (node instanceof UglifyJS.AST_String) {
-      if (imageNames.indexOf(node.value) > -1) {
-        return new UglifyJS.AST_Number({
-          start: node.start,
-          end: node.end,
-          value: imageNames.indexOf(node.value)
-        });
+          if (node instanceof UglifyJS.AST_Call) {
+              if (node.expression.property == 'pushAsset') {
+                  var method = node;
+                  var moduleNumber = assetNames.length;
+                  assetNames.push(method.args[0].value);
+                  var number = new UglifyJS.AST_Number({
+                      start: method.args[0].start,
+                      end: method.args[0].end,
+                      value: moduleNumber
+                  });
+                  method.args[0] = number;
+              }
+          }
       }
-    }
-
-  });
+  );
 
 
   var ast = UglifyJS.parse(data);

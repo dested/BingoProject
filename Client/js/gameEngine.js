@@ -37,6 +37,8 @@ define(
 
         assetLoader.pushAsset('board', 'images/gameBoards/board1.png');
 
+        assetLoader.pushAsset('walkway.red', 'images/walkway/walkway-red.png');
+
         assetLoader.pushAsset('peg.white', 'images/pegs/white_peg.png', {x: 13, y: 9});
         assetLoader.pushAsset('peg.hit.white', 'images/pegs/white_peg_lit_overlay.png');
 
